@@ -108,7 +108,7 @@ if(NOT APPLE)
 
   # -------- gfortran --------
   find_library(GFORTRAN_LIBRARIES
-    HINTS /usr/lib/gcc/x86_64-linux-gnu/7 /usr/lib/gcc/x86_64-redhat-linux/4.8.2/
+    HINTS /usr/lib/gcc/x86_64-linux-gnu/8 /usr/lib/gcc/x86_64-linux-gnu/7 /usr/lib/gcc/x86_64-redhat-linux/4.8.2/
     NAMES libgfortran.a gfortran)
 
   # -------- blas and lapack --------
