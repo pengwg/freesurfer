@@ -26,10 +26,10 @@
 
 #include "vtkFSSurfaceWriter.h"
 
+#include "vtkCellArray.h"
 #include "vtkInformation.h"
 #include "vtkObjectFactory.h"
 #include "vtkPolyData.h"
-#include "vtkCellArray.h"
 
 extern "C" {
 #include "mrisurf.h"
@@ -38,37 +38,28 @@ extern "C" {
 vtkCxxRevisionMacro(vtkFSSurfaceWriter, "$Revision: 1.4 $");
 vtkStandardNewMacro(vtkFSSurfaceWriter);
 
-vtkFSSurfaceWriter::vtkFSSurfaceWriter() :
-  mMRIS( NULL ),
-  FileName( NULL ) {
-}
+vtkFSSurfaceWriter::vtkFSSurfaceWriter() : mMRIS(NULL), FileName(NULL) {}
 
 vtkFSSurfaceWriter::~vtkFSSurfaceWriter() {
 
-  if( NULL != mMRIS )
-    MRISfree( &mMRIS );
+  if (NULL != mMRIS)
+    MRISfree(&mMRIS);
 }
 
-MRIS*
-vtkFSSurfaceWriter::GetMRIS () {
+MRIS *vtkFSSurfaceWriter::GetMRIS() { return mMRIS; }
 
-  return mMRIS;
-}
+void vtkFSSurfaceWriter::WriteData() {
 
-void
-vtkFSSurfaceWriter::WriteData () {
-
-  vtkPolyData* input = this->GetInput();
-  if( NULL == input )
+  vtkPolyData *input = this->GetInput();
+  if (NULL == input)
     return;
-  
+
   // Try to allocate a surface.
-  MRIS* mris = 
-    MRISalloc( input->GetNumberOfPoints(), input->GetNumberOfPolys() );
-  if( NULL == mris ) {
+  MRIS *mris = MRISalloc(input->GetNumberOfPoints(), input->GetNumberOfPolys());
+  if (NULL == mris) {
     vtkErrorMacro("Could not allocate MRIS with "
-		  << input->GetNumberOfPoints() << " points and "
-		  << input->GetNumberOfPolys() << " faces." );
+                  << input->GetNumberOfPoints() << " points and "
+                  << input->GetNumberOfPolys() << " faces.");
     return;
   }
 
@@ -76,72 +67,70 @@ vtkFSSurfaceWriter::WriteData () {
   mris->type = MRIS_TRIANGULAR_SURFACE;
 
   // Copy in the vertices.
-  vtkPoints* points = input->GetPoints();
-  assert( points );
+  vtkPoints *points = input->GetPoints();
+  assert(points);
   int cPoints = input->GetNumberOfPoints();
-  for( int nPoint = 0; nPoint < cPoints; nPoint++ ) {
+  for (int nPoint = 0; nPoint < cPoints; nPoint++) {
 
-    double* point = points->GetPoint( nPoint );
+    double *point = points->GetPoint(nPoint);
     mris->vertices[nPoint].x = point[0];
     mris->vertices[nPoint].y = point[1];
     mris->vertices[nPoint].z = point[2];
   }
-  
+
   // Copy in the faces.
   vtkIdType nFace = 0;
   vtkIdType cPointIDs = 0;
-  vtkIdType* pPointIDs = NULL;
-  vtkCellArray* polys = input->GetPolys();
-  assert( polys );
+  vtkIdType *pPointIDs = NULL;
+  vtkCellArray *polys = input->GetPolys();
+  assert(polys);
 
   setFaceAttachmentDeferred(mris, true);
 
-  for( polys->InitTraversal(); 
-       polys->GetNextCell( cPointIDs, pPointIDs ); nFace++ ) {
+  for (polys->InitTraversal(); polys->GetNextCell(cPointIDs, pPointIDs);
+       nFace++) {
 
-    if( cPointIDs != 3 ) {
-      vtkErrorMacro("Face with invalid number of points: face " << nFace << " with " << cPointIDs << " points.");
-      MRISfree( &mris );
+    if (cPointIDs != 3) {
+      vtkErrorMacro("Face with invalid number of points: face "
+                    << nFace << " with " << cPointIDs << " points.");
+      MRISfree(&mris);
       return;
     }
 
-    mrisAttachFaceToVertices(mris, nFace, pPointIDs[0], pPointIDs[1], pPointIDs[2]);
+    mrisAttachFaceToVertices(mris, nFace, pPointIDs[0], pPointIDs[1],
+                             pPointIDs[2]);
   }
 
   setFaceAttachmentDeferred(mris, false);
 
   // Delete the last MRIS and save this one.
-  if( NULL != mMRIS )
-    MRISfree( &mMRIS );
+  if (NULL != mMRIS)
+    MRISfree(&mMRIS);
   mMRIS = mris;
 
   // Write the data.
-  char* fnMRIS = strdup( this->FileName );
-  MRISwrite( mMRIS, fnMRIS );
-  free( fnMRIS );
+  char *fnMRIS = strdup(this->FileName);
+  MRISwrite(mMRIS, fnMRIS);
+  free(fnMRIS);
 }
 
-int
-vtkFSSurfaceWriter::FillInputPortInformation ( int, vtkInformation* ioInfo ) {
+int vtkFSSurfaceWriter::FillInputPortInformation(int, vtkInformation *ioInfo) {
 
-  ioInfo->Set( vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkPolyData" );
+  ioInfo->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkPolyData");
   return 1;
 }
 
-vtkPolyData*
-vtkFSSurfaceWriter::GetInput () {
- 
-  return vtkPolyData::SafeDownCast( this->Superclass::GetInput() );
+vtkPolyData *vtkFSSurfaceWriter::GetInput() {
+
+  return vtkPolyData::SafeDownCast(this->Superclass::GetInput());
 }
 
-vtkPolyData*
-vtkFSSurfaceWriter::GetInput ( int iPort ) {
+vtkPolyData *vtkFSSurfaceWriter::GetInput(int iPort) {
 
-  return vtkPolyData::SafeDownCast( this->Superclass::GetInput( iPort ) );
+  return vtkPolyData::SafeDownCast(this->Superclass::GetInput(iPort));
 }
 
-void
-vtkFSSurfaceWriter::PrintSelf ( ostream& iStream, vtkIndent iIndent ) {
+void vtkFSSurfaceWriter::PrintSelf(ostream &iStream, vtkIndent iIndent) {
 
-  this->Superclass::PrintSelf( iStream, iIndent );
+  this->Superclass::PrintSelf(iStream, iIndent);
 }

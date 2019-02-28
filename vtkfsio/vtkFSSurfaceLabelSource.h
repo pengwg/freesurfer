@@ -26,7 +26,6 @@
  *
  */
 
-
 #ifndef __vtkFSSurfaceLabelSource_h
 #define __vtkFSSurfaceLabelSource_h
 
@@ -43,20 +42,19 @@ extern "C" {
 
 class vtkFSSurfaceLabelSource : public vtkSource {
 public:
-
   static vtkFSSurfaceLabelSource *New();
-  vtkTypeRevisionMacro(vtkFSSurfaceLabelSource,vtkSource);
+  vtkTypeRevisionMacro(vtkFSSurfaceLabelSource, vtkSource);
 
   // Description:
   // vtkFSSurfaceLabelSource needs an MRIS object on which to map the
   // label. The white coordinates should also be available for this
   // surface.
-  vtkSetMacro(Mris,MRIS*);
-  vtkGetMacro(Mris,MRIS*);
+  vtkSetMacro(Mris, MRIS *);
+  vtkGetMacro(Mris, MRIS *);
 
   // Description:
   // Initialize the label to be empty.
-  void InitializeEmptyLabel ();
+  void InitializeEmptyLabel();
 
   // Description:
   // The file name of the label to read.
@@ -65,42 +63,41 @@ public:
 
   // Description:
   // Get the output of this source.
-  vtkPolyData* GetOutput ();
-  vtkPolyData* GetOutput ( int inOutput );
-  void         SetOutput ( vtkPolyData* iOutput );
+  vtkPolyData *GetOutput();
+  vtkPolyData *GetOutput(int inOutput);
+  void SetOutput(vtkPolyData *iOutput);
 
   // Description:
   // Modify the label in memory.
-  void AddVerticesToLabel ( int icVertices, int* iaVertices );
-  void RemoveVerticesFromLabel ( int icVertices, int* iaVertices );
+  void AddVerticesToLabel(int icVertices, int *iaVertices);
+  void RemoveVerticesFromLabel(int icVertices, int *iaVertices);
 
   // Description:
   // Use LabelWrite to write the label with the current LabelFileName.
-  void WriteLabelFile ();
+  void WriteLabelFile();
 
   // Description:
   // Fill out the input vtkPoints with the labeled points, using the
   // surface coordinates. GetLabeledVertices does the same thing but
   // with vertex numbers.
-  void GetLabeledPoints ( vtkPoints& ioPoints );
-  void GetLabeledVertices ( std::vector<int>& iolVertices );
+  void GetLabeledPoints(vtkPoints &ioPoints);
+  void GetLabeledVertices(std::vector<int> &iolVertices);
 
 protected:
-
   vtkFSSurfaceLabelSource();
   ~vtkFSSurfaceLabelSource();
 
   void Execute();
 
-  void ReadLabelFile ();
+  void ReadLabelFile();
 
-  char* LabelFileName;
-  MRIS* Mris;
-  LABEL* Label;
+  char *LabelFileName;
+  MRIS *Mris;
+  LABEL *Label;
 
 private:
-  vtkFSSurfaceLabelSource(const vtkFSSurfaceLabelSource&);  // Not implemented.
-  void operator=(const vtkFSSurfaceLabelSource&);  // Not implemented.
+  vtkFSSurfaceLabelSource(const vtkFSSurfaceLabelSource &); // Not implemented.
+  void operator=(const vtkFSSurfaceLabelSource &);          // Not implemented.
 };
 
 #endif
