@@ -29,41 +29,45 @@
 #ifndef vtkFSSurfaceScalarsReader_h
 #define vtkFSSurfaceScalarsReader_h
 
-#include "vtkPolyDataAlgorithm.h"
 #include <string>
+#include "vtkPolyDataAlgorithm.h"
 
 class vtkFloatArray;
 
 class vtkFSSurfaceScalarsReader : public vtkPolyDataAlgorithm {
 
-public:
-  static vtkFSSurfaceScalarsReader *New();
-  vtkTypeRevisionMacro(vtkFSSurfaceScalarsReader, vtkPolyDataAlgorithm);
-  void PrintSelf(ostream &os, vtkIndent indent);
+ public:
+  
+  static vtkFSSurfaceScalarsReader* New ();
+  vtkTypeMacro( vtkFSSurfaceScalarsReader, vtkPolyDataAlgorithm );
+  void PrintSelf ( ostream& os, vtkIndent indent );
 
-  void SetFileName(const char *ifn);
-  const char *GetFileName() const;
+  void SetFileName ( const char* ifn );
+  const char* GetFileName () const;
 
-  vtkSetMacro(NumberOfValues, int);
-  vtkGetMacro(NumberOfValues, int);
+  vtkSetMacro(NumberOfValues,int);
+  vtkGetMacro(NumberOfValues,int);
 
-protected:
-  vtkFSSurfaceScalarsReader();
-  virtual ~vtkFSSurfaceScalarsReader();
+ protected:
+
+  vtkFSSurfaceScalarsReader ();
+  virtual ~vtkFSSurfaceScalarsReader ();
 
   // Description:
   // Read the file, create the array of floats, and set our output.
-  virtual int RequestData(vtkInformation *, vtkInformationVector **,
-                          vtkInformationVector *iOutputVector);
+  virtual int RequestData ( vtkInformation*,
+			    vtkInformationVector**,
+			    vtkInformationVector* iOutputVector );
+
 
   static const int NEW_SCALAR_MAGIC_NUMBER = 16777215;
 
   std::string FileName;
   int NumberOfValues;
 
-private:
-  vtkFSSurfaceScalarsReader(const vtkFSSurfaceScalarsReader &);
-  void operator=(const vtkFSSurfaceScalarsReader &);
+ private:
+  vtkFSSurfaceScalarsReader ( const vtkFSSurfaceScalarsReader& );
+  void operator= ( const vtkFSSurfaceScalarsReader& );
 };
 
 #endif

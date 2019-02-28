@@ -33,39 +33,42 @@ extern "C" {
 class vtkPolyData;
 
 class vtkFSSurfaceWriter : public vtkWriter {
+  
+ public:
 
-public:
   static vtkFSSurfaceWriter *New();
-  vtkTypeRevisionMacro(vtkFSSurfaceWriter, vtkWriter);
-  void PrintSelf(ostream &os, vtkIndent indent);
-
+  vtkTypeMacro(vtkFSSurfaceWriter,vtkWriter);
+  void PrintSelf(ostream& os, vtkIndent indent);
+  
   // Description:
   // Get the input to this writer.
-  vtkPolyData *GetInput();
-  vtkPolyData *GetInput(int port);
+  vtkPolyData* GetInput();
+  vtkPolyData* GetInput(int port);
 
   // Description:
   // Specify file name of the MRIS data file to write.
   vtkSetStringMacro(FileName);
   vtkGetStringMacro(FileName);
 
-  MRIS *GetMRIS();
-
-protected:
+  MRIS* GetMRIS ();
+  
+ protected:
   vtkFSSurfaceWriter();
   ~vtkFSSurfaceWriter();
-
+  
   void WriteData();
-
+  
   virtual int FillInputPortInformation(int port, vtkInformation *info);
+  
+  MRIS* mMRIS;
 
-  MRIS *mMRIS;
+  char* FileName;
 
-  char *FileName;
-
-private:
-  vtkFSSurfaceWriter(const vtkFSSurfaceWriter &); // Not implemented.
-  void operator=(const vtkFSSurfaceWriter &);     // Not implemented.
+ private:
+  vtkFSSurfaceWriter(const vtkFSSurfaceWriter&);  // Not implemented.
+  void operator=(const vtkFSSurfaceWriter&);  // Not implemented.
 };
 
 #endif
+
+

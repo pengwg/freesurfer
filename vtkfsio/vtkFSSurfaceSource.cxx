@@ -24,6 +24,7 @@
 
 #include "vtkFSSurfaceSource.h"
 #include "vtkCellArray.h"
+#include "vtkExecutive.h"
 #include "vtkFloatArray.h"
 #include "vtkObjectFactory.h"
 #include "vtkPointData.h"
@@ -37,17 +38,16 @@
 using namespace std;
 
 vtkStandardNewMacro(vtkFSSurfaceSource);
-vtkCxxRevisionMacro(vtkFSSurfaceSource, "$Revision: 1.14 $");
 
 vtkFSSurfaceSource::vtkFSSurfaceSource()
     : mMRIS(NULL), mbBoundsCacheDirty(true), mHashTable(NULL) {
 
-  this->vtkSource::SetNthOutput(0, vtkPolyData::New());
+  this->GetExecutive()->SetOutputData(0, vtkPolyData::New());
 
   // Releasing data for pipeline parallism.
   // Filters will know it is empty.
-  this->Outputs[0]->ReleaseData();
-  this->Outputs[0]->Delete();
+  this->GetOutput(0)->ReleaseData();
+  this->GetOutput(0)->Delete();
 }
 
 vtkFSSurfaceSource::~vtkFSSurfaceSource() {
@@ -129,21 +129,21 @@ void vtkFSSurfaceSource::MRISRead(char const *ifn) {
 
 vtkPolyData *vtkFSSurfaceSource::GetOutput() {
 
-  if (this->NumberOfOutputs < 1) {
+  if (this->GetNumberOfOutputPorts() < 1) {
     return NULL;
   }
 
-  return (vtkPolyData *)(this->Outputs[0]);
+  return (vtkPolyData *)(this->GetOutput(0));
 }
 
 vtkPolyData *vtkFSSurfaceSource::GetOutput(int inOutput) {
 
-  return (vtkPolyData *)this->vtkSource::GetOutput(inOutput);
+  return (vtkPolyData *)this->GetExecutive()->GetOutputData(inOutput);
 }
 
 void vtkFSSurfaceSource::SetOutput(vtkPolyData *iOutput) {
 
-  this->vtkSource::SetNthOutput(0, iOutput);
+  this->GetExecutive()->SetOutputData(0, iOutput);
 }
 
 void vtkFSSurfaceSource::ConvertSurfaceToRAS(float iX, float iY, float iZ,

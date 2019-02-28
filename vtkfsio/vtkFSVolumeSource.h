@@ -33,7 +33,7 @@
 #include "vtkImageData.h"
 #include "vtkMatrix4x4.h"
 #include "vtkStructuredPoints.h"
-#include "vtkStructuredPointsSource.h"
+#include "vtkStructuredPointsReader.h"
 extern "C" {
 #include "mri.h"
 }
@@ -47,10 +47,10 @@ extern "C" {
 #undef Y
 #endif
 
-class vtkFSVolumeSource : public vtkStructuredPointsSource {
+class vtkFSVolumeSource : public vtkStructuredPointsReader {
 public:
   static vtkFSVolumeSource *New();
-  vtkTypeRevisionMacro(vtkFSVolumeSource, vtkStructuredPointsSource);
+  vtkTypeMacro(vtkFSVolumeSource, vtkStructuredPointsReader);
 
   // Description:
   // This will call the MRIread function from the FS library.

@@ -35,7 +35,6 @@ extern "C" {
 #include "mrisurf.h"
 }
 
-vtkCxxRevisionMacro(vtkFSSurfaceWriter, "$Revision: 1.4 $");
 vtkStandardNewMacro(vtkFSSurfaceWriter);
 
 vtkFSSurfaceWriter::vtkFSSurfaceWriter() : mMRIS(NULL), FileName(NULL) {}

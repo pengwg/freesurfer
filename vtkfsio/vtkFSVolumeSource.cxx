@@ -53,7 +53,6 @@
 using namespace std;
 
 vtkStandardNewMacro(vtkFSVolumeSource);
-vtkCxxRevisionMacro(vtkFSVolumeSource, "$Revision: 1.12 $");
 
 vtkFSVolumeSource::vtkFSVolumeSource()
     : mMRI(NULL), mbUseActualPixelSpacing(false), mbBoundsCacheDirty(true) {
@@ -244,10 +243,10 @@ void vtkFSVolumeSource::ExecuteInformation() {
   }
 
   // Set relevant information from the ImageData in the output.
-  output->SetWholeExtent(mImageData->GetWholeExtent());
-  output->SetScalarType(mImageData->GetScalarType());
+  output->SetExtent(mImageData->GetExtent());
+  output->SetScalarType(mImageData->GetScalarType(), mImageData->GetInformation());
   output->SetNumberOfScalarComponents(
-      mImageData->GetNumberOfScalarComponents());
+      mImageData->GetNumberOfScalarComponents(), mImageData->GetInformation());
   if (mbUseActualPixelSpacing)
     mImageData->SetSpacing(mMRI->xsize, mMRI->ysize, mMRI->zsize);
   else
@@ -543,35 +542,35 @@ void vtkFSVolumeSource::CopyMRIToImage() {
     mImageData->SetSpacing(1, 1, 1);
 
   mImageData->SetOrigin(-zX / 2, -zY / 2, -zZ / 2);
-  mImageData->SetWholeExtent(0, zX - 1, 0, zY - 1, 0, zZ - 1);
-  mImageData->SetNumberOfScalarComponents(zFrames);
+  mImageData->SetExtent(0, zX - 1, 0, zY - 1, 0, zZ - 1);
+  mImageData->SetNumberOfScalarComponents(zFrames, mImageData->GetInformation());
 
   // create the scalars for all of the images. set the element size
   // for the data we will read.
   vtkDebugMacro(<< "Creating vtkUnsignedCharArray");
   switch (mMRI->type) {
   case MRI_UCHAR:
-    mImageData->SetScalarTypeToUnsignedChar();
+    mImageData->SetScalarType(VTK_UNSIGNED_CHAR, mImageData->GetInformation());
     ucharScalars = vtkUnsignedCharArray::New();
     scalars = (vtkDataArray *)ucharScalars;
     break;
   case MRI_INT:
-    mImageData->SetScalarTypeToInt();
+    mImageData->SetScalarType(VTK_INT, mImageData->GetInformation());
     intScalars = vtkIntArray::New();
     scalars = (vtkDataArray *)intScalars;
     break;
   case MRI_LONG:
-    mImageData->SetScalarTypeToLong();
+    mImageData->SetScalarType(VTK_LONG, mImageData->GetInformation());
     longScalars = vtkLongArray::New();
     scalars = (vtkDataArray *)longScalars;
     break;
   case MRI_FLOAT:
-    mImageData->SetScalarTypeToFloat();
+    mImageData->SetScalarType(VTK_FLOAT, mImageData->GetInformation());
     floatScalars = vtkFloatArray::New();
     scalars = (vtkDataArray *)floatScalars;
     break;
   case MRI_SHORT:
-    mImageData->SetScalarTypeToShort();
+    mImageData->SetScalarType(VTK_SHORT, mImageData->GetInformation());
     shortScalars = vtkShortArray::New();
     scalars = (vtkDataArray *)shortScalars;
     break;

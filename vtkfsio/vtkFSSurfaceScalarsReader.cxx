@@ -18,7 +18,6 @@ extern "C" {
 
 using namespace std;
 
-vtkCxxRevisionMacro(vtkFSSurfaceScalarsReader, "$Revision: 1.3 $");
 vtkStandardNewMacro(vtkFSSurfaceScalarsReader);
 
 vtkFSSurfaceScalarsReader::vtkFSSurfaceScalarsReader()
