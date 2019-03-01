@@ -1,15 +1,15 @@
 #ifndef __vtkFDTensorGlyph_h
 #define __vtkFDTensorGlyph_h
 
-#include <vtkStructuredPointsToPolyDataFilter.h>
+#include <vtkStructuredPointsGeometryFilter.h>
 #include <vtkTransform.h>
 
 class vtkLookupTable;
 
-class vtkFDTensorGlyph : public vtkStructuredPointsToPolyDataFilter {
+class vtkFDTensorGlyph : public vtkStructuredPointsGeometryFilter {
 
  public:
-  vtkTypeMacro(vtkFDTensorGlyph,vtkStructuredPointsToPolyDataFilter);
+  vtkTypeMacro(vtkFDTensorGlyph,vtkStructuredPointsGeometryFilter);
   //void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description

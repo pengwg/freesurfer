@@ -237,7 +237,7 @@ void vtkFDTensorGlyph::Execute() {
 }
 
 void vtkFDTensorGlyph::ComputeScalarRangeGreaterThanZero(const int component, double range[2]) {
-  vtkImageData *input = this->GetInput();
+  vtkImageData *input = reinterpret_cast<vtkImageData *>(this->GetInput());
   float *scalarPointer = static_cast<float *>(input->GetScalarPointer());
   int numberOfComponents = input->GetNumberOfScalarComponents();
   if (component >= numberOfComponents) {
