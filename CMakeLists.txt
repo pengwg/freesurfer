@@ -165,7 +165,10 @@ find_package(VTK)
 if(BUILD_GUIS)
 
   # -------- openGL --------
-  cmake_policy(SET CMP0072 NEW)
+  if(${CMAKE_VERSION} VERSION_GREATER "3.11.0")
+    cmake_policy(SET CMP0072 NEW)
+  endif()
+
   if(EXISTS /usr/lib64/nvidia/libGL.so)
     # on some martinos centos7 machines, linking to the default libGL.so fails due to missing symbols
     # in the nvidia drivers, so as a temporary fix, link directly to the nvidia GL library
