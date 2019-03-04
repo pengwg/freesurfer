@@ -110,6 +110,9 @@ if(NOT APPLE)
   find_library(GFORTRAN_LIBRARIES
     HINTS /usr/lib/gcc/x86_64-linux-gnu/8 /usr/lib/gcc/x86_64-linux-gnu/7 /usr/lib/gcc/x86_64-redhat-linux/4.8.2/
     NAMES libgfortran.a gfortran)
+  find_library(QUADMATH_LIBRARIES
+    HINTS /usr/lib/gcc/x86_64-linux-gnu/8 /usr/lib/gcc/x86_64-linux-gnu/7
+    NAMES libquadmath.a quadmath)
 
   # -------- blas and lapack --------
   find_library(BLAS_LIBRARIES NAMES libblas.a)
