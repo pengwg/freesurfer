@@ -690,7 +690,7 @@ ComputeSurfaceDistanceFunction(MRIS* mris,
 
   // compute the unsigned distance
   vtkImplicitModeller* implicit = vtkImplicitModeller::New();
-  implicit->SetInput(mesh);
+  implicit->SetInputData(mesh);
   double bounds[6] =
     { 0, (double)dims[0]-1.0, 0.0, (double)dims[1]-1.0, 0.0, (double)dims[2]-1.0 };
   implicit->SetModelBounds(bounds);

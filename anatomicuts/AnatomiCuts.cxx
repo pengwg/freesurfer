@@ -199,7 +199,7 @@ int main(int narg, char* arg[])
 				trkReader->TrkToVTK();
 			
 				vtkSmartPointer<vtkSplineFilter> spline = vtkSmartPointer<vtkSplineFilter>::New();
-				spline->SetInput(trkReader->GetOutputPolyData());
+                spline->SetInputData(trkReader->GetOutputPolyData());
 				spline->SetNumberOfSubdivisions(numberOfPoints);
 				spline->Update();
 				converter->SetVTKPolyData ( spline->GetOutput());
@@ -214,7 +214,7 @@ int main(int narg, char* arg[])
 				vtkReader->Update();
 				
 				vtkSmartPointer<vtkSplineFilter> spline = vtkSmartPointer<vtkSplineFilter>::New();
-				spline->SetInput(vtkReader->GetOutput());
+                spline->SetInputData(vtkReader->GetOutput());
 				spline->SetNumberOfSubdivisions(numberOfPoints);
 				spline->Update();
 				converter->SetVTKPolyData ( spline->GetOutput());
@@ -584,7 +584,7 @@ int main(int narg, char* arg[])
 
 			vtkSmartPointer<vtkPolyDataWriter> writerFixed = vtkPolyDataWriter::New();
 			writerFixed->SetFileName ( meshName2);
-			writerFixed->SetInput(vtkConverter->GetOutputPolyData());
+            writerFixed->SetInputData(vtkConverter->GetOutputPolyData());
 			writerFixed->SetFileTypeToBinary();
 			writerFixed->Update();
 			//std::cout << " saving file " << meshName2 << std::endl;

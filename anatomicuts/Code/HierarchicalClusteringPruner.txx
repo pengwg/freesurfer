@@ -122,7 +122,7 @@ void
 			{
 				vtkSmartPointer<vtkPolyDataReader> reader = vtkPolyDataReader::New();
 				reader->SetFileName (file.c_str() );
-				reader->GetOutput()->Update();
+                reader->Update();
 				polydatas.push_back(reader->GetOutput());
 			}
 		}

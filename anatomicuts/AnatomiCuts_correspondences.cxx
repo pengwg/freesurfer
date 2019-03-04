@@ -367,10 +367,10 @@ void GetMeshes(GetPot cl, const char* find1, const char* find2, std::vector<Basi
 		vtkPolyDataReader *reader = vtkPolyDataReader::New();
 		reader->SetFileName ( cl.next("") );
 		files->push_back(reader->GetFileName());
-		reader->GetOutput()->Update();
+        reader->Update();
 
 		vtkSmartPointer<vtkSplineFilter> spline = vtkSmartPointer<vtkSplineFilter>::New();
-		spline->SetInput(reader->GetOutput());
+        spline->SetInputData(reader->GetOutput());
 		spline->SetNumberOfSubdivisions(9);
 		spline->Update();
 
@@ -396,7 +396,7 @@ std::vector<BasicMeshType::Pointer> FixSampleClusters(std::vector<vtkSmartPointe
 	for (unsigned int i=0;i<polydatas.size(); i++)
 	{
 		vtkSmartPointer<vtkSplineFilter> spline = vtkSmartPointer<vtkSplineFilter>::New();
-		spline->SetInput(polydatas[i]);
+        spline->SetInputData(polydatas[i]);
 		spline->SetNumberOfSubdivisions(9);
 		spline->Update();
 

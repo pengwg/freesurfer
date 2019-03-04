@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
 	{
 		vtkPolyDataWriter *writerFixed = vtkPolyDataWriter::New();
 		writerFixed->SetFileName ( meshName2);
-		writerFixed->SetInput(vtkConverter->GetOutputPolyData());
+        writerFixed->SetInputData(vtkConverter->GetOutputPolyData());
 		writerFixed->SetFileTypeToBinary();
 		writerFixed->Update();
 	}

@@ -85,7 +85,7 @@ int main(int narg, char* arg[])
 		{
 			vtkSmartPointer<vtkPolyDataWriter> writerFixed = vtkPolyDataWriter::New();
 			writerFixed->SetFileName ( cl.follow("","-v"));
-			writerFixed->SetInput(vtkConverter->GetOutputPolyData());
+            writerFixed->SetInputData(vtkConverter->GetOutputPolyData());
 			writerFixed->SetFileTypeToBinary();
 			writerFixed->Update();
 		}
