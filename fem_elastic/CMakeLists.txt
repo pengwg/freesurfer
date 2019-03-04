@@ -5,6 +5,7 @@ if(PETSC_FOUND)
   include_directories(
     ${FS_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}/packages/tetgen
+    ${MPI_INCLUDE_DIR}
     ${PETSC_INCLUDE_DIR}
     ${ITK_INCLUDE_DIRS}
   )
@@ -64,6 +65,7 @@ if(PETSC_FOUND)
     ${LAPACK_LIBRARIES}
     ${BLAS_LIBRARIES}
     ${GFORTRAN_LIBRARIES}
+    ${QUADMATH_LIBRARIES}
   )
   install(TARGETS surf2vol DESTINATION bin)
 

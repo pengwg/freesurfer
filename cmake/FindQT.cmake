@@ -1,14 +1,5 @@
 # Qt Find Module
 
-if(NOT Qt5_DIR)
-  # default search path
-  if(EXISTS ${FS_PACKAGES_DIR}/qt/5.11/lib/cmake/Qt5)
-    set(Qt5_DIR ${FS_PACKAGES_DIR}/qt/5.11/lib/cmake/Qt5)
-  elseif(EXISTS ${FS_PACKAGES_DIR}/qt/5.6/lib/cmake/Qt5)
-    set(Qt5_DIR ${FS_PACKAGES_DIR}/qt/5.6/lib/cmake/Qt5)
-  endif()
-endif()
-
 # find Qt components
 set(_qt_components Core Widgets)
 if(NOT APPLE)

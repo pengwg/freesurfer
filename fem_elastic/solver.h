@@ -124,7 +124,7 @@ public:
   {
     m_displayLevel = level;
   }
-  void get_displayLevel() const
+  int get_displayLevel() const
   {
     return m_displayLevel;
   }
@@ -288,10 +288,10 @@ int
 TSolver<Cstr,n>::solve()
 {
   PetscErrorCode ierr;
-  PetscTruth petscFlag;
+  PetscBool petscFlag;
   bool femPrint = false;
 
-  ierr = PetscOptionsGetReal( NULL, "-penalty_weight",
+  ierr = PetscOptionsGetReal( NULL, NULL, "-penalty_weight",
                               &m_mfcWeight, NULL);
   CHKERRQ(ierr);
   std::cout << " penalty_weight = " << m_mfcWeight << std::endl;
@@ -310,7 +310,7 @@ TSolver<Cstr,n>::solve()
   {
     const unsigned int maxLen = 256;
     char buffer[maxLen];
-    ierr = PetscOptionsGetString(NULL, "-fem_print",
+    ierr = PetscOptionsGetString(NULL, NULL, "-fem_print",
                                  buffer, maxLen, &petscFlag);
     if ( petscFlag )
     {
@@ -319,7 +319,7 @@ TSolver<Cstr,n>::solve()
       PetscViewerBinaryOpen( PETSC_COMM_SELF, buffer,
                              FILE_MODE_WRITE, &viewer);
       MatView(m_stiffness, viewer);
-      PetscViewerDestroy(viewer);
+      PetscViewerDestroy(&viewer);
     }
   }
 
@@ -332,7 +332,7 @@ TSolver<Cstr,n>::solve()
     PetscViewerBinaryOpen( PETSC_COMM_SELF, "final_stif.bin",
                            FILE_MODE_WRITE, &viewer);
     MatView(m_stiffness, viewer);
-    PetscViewerDestroy(viewer);
+    PetscViewerDestroy(&viewer);
   }
 
   // final assembly point
@@ -346,7 +346,7 @@ TSolver<Cstr,n>::solve()
   ierr = VecAssemblyEnd(m_load);
   CHKERRQ(ierr);
 
-  ierr = PetscOptionsHasName( NULL,  "-init_guess_nonzero", &petscFlag );
+  ierr = PetscOptionsHasName( NULL, NULL, "-init_guess_nonzero", &petscFlag );
   CHKERRQ(ierr);
   bool initGuessNonZero = static_cast<bool>( petscFlag );
   if (initGuessNonZero )
@@ -363,7 +363,7 @@ TSolver<Cstr,n>::solve()
   KSP ksp;
   ierr = KSPCreate(PETSC_COMM_WORLD, &ksp);
   CHKERRQ(ierr);
-  ierr = KSPSetOperators(ksp, m_stiffness, m_stiffness, SAME_NONZERO_PATTERN);
+  ierr = KSPSetOperators(ksp, m_stiffness, m_stiffness);
   CHKERRQ(ierr);
   //ierr = KSPGetPC(ksp, &pc); CHKERRQ(ierr);
   //ierr = PCSetType(pc, PCJACOBI); CHKERRQ(ierr);
@@ -409,7 +409,7 @@ TSolver<Cstr,n>::solve()
   CHKERRQ(ierr);
   ierr = VecNorm(vcheck, NORM_2, &norm);
   CHKERRQ(ierr);
-  ierr = VecDestroy(vcheck);
+  ierr = VecDestroy(&vcheck);
   CHKERRQ(ierr);
 
   ierr = PetscPrintf(PETSC_COMM_WORLD, "Absolute-Norm of error = %A\n", norm);
@@ -432,7 +432,7 @@ TSolver<Cstr,n>::solve()
                            FILE_MODE_WRITE,
                            &viewer );
     MatView(m_stiffness, viewer);
-    PetscViewerDestroy(viewer);
+    PetscViewerDestroy(&viewer);
 
     sprintf(pchBuf, "load_%d.bin", outCount);
     PetscViewerBinaryOpen( PETSC_COMM_SELF,
@@ -440,7 +440,7 @@ TSolver<Cstr,n>::solve()
                            FILE_MODE_WRITE,
                            &viewer);
     VecView(m_load, viewer);
-    PetscViewerDestroy(viewer);
+    PetscViewerDestroy(&viewer);
 
     sprintf(pchBuf, "sol_%d.bin", outCount);
     PetscViewerBinaryOpen( PETSC_COMM_SELF,
@@ -448,22 +448,22 @@ TSolver<Cstr,n>::solve()
                            FILE_MODE_WRITE,
                            &viewer);
     VecView(m_delta, viewer);
-    PetscViewerDestroy(viewer);
+    PetscViewerDestroy(&viewer);
 
     delete[] pchBuf;
   }
 
   // release Petsc resources
-  ierr = VecDestroy(m_delta);
+  ierr = VecDestroy(&m_delta);
   CHKERRQ(ierr);
   m_delta=0;
-  ierr = VecDestroy(m_load);
+  ierr = VecDestroy(&m_load);
   CHKERRQ(ierr);
   m_load=0;
-  ierr = MatDestroy(m_stiffness);
+  ierr = MatDestroy(&m_stiffness);
   CHKERRQ(ierr);
   m_stiffness=0;
-  ierr = KSPDestroy(ksp);
+  ierr = KSPDestroy(&ksp);
   CHKERRQ(ierr);
   ksp = 0;
 
@@ -658,9 +658,9 @@ TSolver<Cstr,n>::setup_matrix(bool showInfo)
   CHKERRQ(ierr);
   ierr = MatSetFromOptions(m_stiffness);
   CHKERRQ(ierr);
-  ierr = MatSetOption(m_stiffness, MAT_SYMMETRIC);
+  ierr = MatSetOption(m_stiffness, MAT_SYMMETRIC, PETSC_TRUE);
   CHKERRQ(ierr);
-  ierr = MatSetOption(m_stiffness, MAT_SYMMETRY_ETERNAL);
+  ierr = MatSetOption(m_stiffness, MAT_SYMMETRY_ETERNAL, PETSC_TRUE);
   CHKERRQ(ierr);
 
   int iold_val = -1;
@@ -950,7 +950,7 @@ TSolver<Cstr,n>::setup_load()
   tNode* pnode;
   int no_eqs = n * m_pmesh->get_no_nodes();
 
-  ierr = MatSetOption(m_stiffness, MAT_NO_NEW_NONZERO_LOCATIONS);
+  ierr = MatSetOption(m_stiffness, MAT_NEW_NONZERO_LOCATIONS, PETSC_FALSE);
   CHKERRQ(ierr);
 
   std::map<int, double> mrhs;
@@ -996,11 +996,11 @@ TSolver<Cstr,n>::setup_load()
 
   IS is;
   ierr = ISCreateGeneral(PETSC_COMM_WORLD, (int)mrhs.size(),
-                         indices, &is);
+                         indices, PETSC_COPY_VALUES,&is);
   CHKERRQ(ierr);
-  ierr = MatZeroRowsIS(m_stiffness, is, 1.0);
+  ierr = MatZeroRowsIS(m_stiffness, is, 1.0, NULL, NULL);
   CHKERRQ(ierr);
-  ierr = ISDestroy(is);
+  ierr = ISDestroy(&is);
   CHKERRQ(ierr);
 
   ierr = VecSetValues(m_load, (int)mrhs.size(),
@@ -1030,7 +1030,7 @@ TSolver<Cstr,n>::setup_load_sym()
 
   int no_eqs = n * m_pmesh->get_no_nodes();
 
-  ierr = MatSetOption(m_stiffness, MAT_NO_NEW_NONZERO_LOCATIONS);
+  ierr = MatSetOption(m_stiffness, MAT_NEW_NONZERO_LOCATIONS, PETSC_FALSE);
   CHKERRQ(ierr);
   std::map<int,double> mrhs;
 
@@ -1113,7 +1113,7 @@ TSolver<Cstr,n>::setup_load_sym()
 
   ierr = MatMult( m_stiffness, vecBcs, m_load);
   CHKERRQ(ierr);
-  ierr = VecDestroy(vecBcs);
+  ierr = VecDestroy(&vecBcs);
   CHKERRQ(ierr);
   ierr = VecSetValues( m_load, (int)mrhs.size(),
                        indices, values, INSERT_VALUES);
@@ -1122,16 +1122,16 @@ TSolver<Cstr,n>::setup_load_sym()
   // condition the matrix
   IS is;
   ierr = ISCreateGeneral(PETSC_COMM_WORLD, (int)mrhs.size(),
-                         indices, &is);
+                         indices, PETSC_COPY_VALUES, &is);
   CHKERRQ(ierr);
-  ierr = MatZeroRowsIS(m_stiffness, is, 1.0);
+  ierr = MatZeroRowsIS(m_stiffness, is, 1.0, NULL, NULL);
   CHKERRQ(ierr);
-  ierr = MatTranspose( m_stiffness, PETSC_NULL);
+  ierr = MatTranspose( m_stiffness,  MAT_INPLACE_MATRIX, PETSC_NULL);
   CHKERRQ(ierr);
-  ierr = MatZeroRowsIS(m_stiffness, is, 1.0);
+  ierr = MatZeroRowsIS(m_stiffness, is, 1.0, NULL, NULL);
   CHKERRQ(ierr);
 
-  ierr = ISDestroy(is);
+  ierr = ISDestroy(&is);
   CHKERRQ(ierr);
 
   return 0;
@@ -1254,14 +1254,13 @@ TDirectSolver<Cstr,n>::solve()
   CHKERRQ(ierr);
   ierr = KSPSetOperators(ksp,
                          this->m_stiffness,
-                         this->m_stiffness,
-                         SAME_NONZERO_PATTERN);
+                         this->m_stiffness);
   CHKERRQ(ierr);
   ierr = KSPGetPC(ksp, &pc);
   CHKERRQ(ierr);
   ierr = PCSetType(pc, PCJACOBI);
   CHKERRQ(ierr);
-  ierr = PCFactorSetUseInPlace(pc);
+  ierr = PCFactorSetUseInPlace(pc, PETSC_TRUE);
   ierr = KSPSetType(ksp, KSPCG);
   CHKERRQ(ierr);
 
@@ -1297,7 +1296,7 @@ TDirectSolver<Cstr,n>::solve()
       "ksp-diverged-nonsymmetric";
     kspConvergenceReason[KSP_DIVERGED_INDEFINITE_PC]=
       "ksp-diverged-indefinite-pc";
-    kspConvergenceReason[KSP_DIVERGED_NAN]="ksp-diverged-nan";
+    kspConvergenceReason[KSP_DIVERGED_NANORINF]="ksp-diverged-nanorinf";
     kspConvergenceReason[KSP_DIVERGED_INDEFINITE_MAT]=
       "ksp-diverged-indefinite-mat";
     kspConvergenceReason[KSP_CONVERGED_ITERATING]="ksp-converged-iterating";
@@ -1314,16 +1313,16 @@ TDirectSolver<Cstr,n>::solve()
   this->comm_solution();
 
   // release Petsc resources
-  ierr = VecDestroy(this->m_delta);
+  ierr = VecDestroy(&this->m_delta);
   CHKERRQ(ierr);
   this->m_delta = 0;
-  ierr = VecDestroy(this->m_load);
+  ierr = VecDestroy(&this->m_load);
   CHKERRQ(ierr);
   this->m_load=0;
-  ierr = MatDestroy(this->m_stiffness);
+  ierr = MatDestroy(&this->m_stiffness);
   CHKERRQ(ierr);
   this->m_stiffness=0;
-  ierr = KSPDestroy(ksp);
+  ierr = KSPDestroy(&ksp);
   CHKERRQ(ierr);
   ksp = 0;
 
