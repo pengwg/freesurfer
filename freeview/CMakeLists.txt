@@ -92,8 +92,8 @@ if(BUILD_GUIS AND VTK_FOUND AND PETSC_FOUND AND TARGET vtkutils)
     PanelSurface.cpp
     PanelVolume.cpp
     qtcolorpicker.cpp
-    QVTKWidget.cxx
-    QVTKPaintEngine.cxx
+#    QVTKWidget.cxx
+#    QVTKPaintEngine.cxx
     Region2D.cpp
     Region2DLine.cpp
     Region2DPolyline.cpp
@@ -213,6 +213,7 @@ if(BUILD_GUIS AND VTK_FOUND AND PETSC_FOUND AND TARGET vtkutils)
     ${LAPACK_LIBRARIES}
     ${BLAS_LIBRARIES}
     ${GFORTRAN_LIBRARIES}
+    ${QUADMATH_LIBRARIES}
     -static-libgcc
   )
 

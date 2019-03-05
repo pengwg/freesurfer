@@ -558,23 +558,22 @@ bool FSVolume::Create( FSVolume* src_vol, bool bCopyVoxelData, int data_type )
   }
   else
   {
-    m_imageData->SetNumberOfScalarComponents( 1 );
     switch ( m_MRI->type )
     {
     case MRI_UCHAR:
-      m_imageData->SetScalarTypeToUnsignedChar();
+      m_imageData->AllocateScalars(VTK_UNSIGNED_CHAR, 1);
       break;
     case MRI_INT:
-      m_imageData->SetScalarTypeToInt();
+      m_imageData->AllocateScalars(VTK_INT, 1);
       break;
     case MRI_LONG:
-      m_imageData->SetScalarTypeToLong();
+      m_imageData->AllocateScalars(VTK_LONG, 1);
       break;
     case MRI_FLOAT:
-      m_imageData->SetScalarTypeToFloat();
+      m_imageData->AllocateScalars(VTK_FLOAT, 1);
       break;
     case MRI_SHORT:
-      m_imageData->SetScalarTypeToShort();
+      m_imageData->AllocateScalars(VTK_SHORT, 1);
       break;
     default:
       break;
@@ -583,7 +582,6 @@ bool FSVolume::Create( FSVolume* src_vol, bool bCopyVoxelData, int data_type )
     m_imageData->SetOrigin( src_vol->m_imageData->GetOrigin() );
     m_imageData->SetSpacing( src_vol->m_imageData->GetSpacing() );
     m_imageData->SetDimensions( src_vol->m_imageData->GetDimensions() );
-    m_imageData->AllocateScalars();
     char* ptr = ( char* )m_imageData->GetScalarPointer();
     int* nDim = m_imageData->GetDimensions();
     if ( !ptr )
@@ -1989,40 +1987,41 @@ bool FSVolume::CreateImage( MRI* rasMRI )
   imageData->SetOrigin( origin[0], origin[1], origin[2] );
   //  imageData->SetWholeExtent( 0, zX-1, 0, zY-1, 0, zZ-1 );
   imageData->SetDimensions(zX, zY, zZ);
-  imageData->SetNumberOfScalarComponents( rasMRI->type == MRI_RGB? 4:zFrames );
+  // imageData->SetNumberOfScalarComponents( rasMRI->type == MRI_RGB? 4:zFrames );
+  int numberOfScalarComponets = rasMRI->type == MRI_RGB? 4:zFrames;
 
   // create the scalars for all of the images. set the element size
   // for the data we will read.
   switch ( rasMRI->type )
   {
   case MRI_UCHAR:
-    imageData->SetScalarTypeToUnsignedChar();
+    imageData->AllocateScalars(VTK_UNSIGNED_CHAR, numberOfScalarComponets);
     ucharScalars = vtkUnsignedCharArray::New();
     scalars = (vtkDataArray*) ucharScalars;
     break;
   case MRI_INT:
-    imageData->SetScalarTypeToInt();
+    imageData->AllocateScalars(VTK_INT, numberOfScalarComponets);
     intScalars = vtkIntArray::New();
     scalars = (vtkDataArray*) intScalars;
     break;
   case MRI_RGB:
-    imageData->SetScalarTypeToUnsignedChar();
+    imageData->AllocateScalars(VTK_UNSIGNED_CHAR, numberOfScalarComponets);
     ucharScalars = vtkUnsignedCharArray::New();
     scalars = (vtkDataArray*) ucharScalars;
     zFrames = 4;
     break;
   case MRI_LONG:
-    imageData->SetScalarTypeToLong();
+    imageData->AllocateScalars(VTK_LONG, numberOfScalarComponets);
     longScalars = vtkLongArray::New();
     scalars = (vtkDataArray*) longScalars;
     break;
   case MRI_FLOAT:
-    imageData->SetScalarTypeToFloat();
+    imageData->AllocateScalars(VTK_FLOAT, numberOfScalarComponets);
     floatScalars = vtkFloatArray::New();
     scalars = (vtkDataArray*) floatScalars;
     break;
   case MRI_SHORT:
-    imageData->SetScalarTypeToShort();
+    imageData->AllocateScalars(VTK_SHORT, numberOfScalarComponets);
     shortScalars = vtkShortArray::New();
     scalars = (vtkDataArray*) shortScalars;
     break;
@@ -2144,39 +2143,39 @@ bool FSVolume::ResizeRotatedImage( MRI* rasMRI, MRI* refTarget, vtkImageData* re
   imageData->SetSpacing( rasMRI->xsize, rasMRI->ysize, rasMRI->zsize );
   imageData->SetOrigin( origin[0], origin[1], origin[2] );
 
-  imageData->SetWholeExtent( 0, zX-1, 0, zY-1, 0, zZ-1 );
-  imageData->SetNumberOfScalarComponents( zFrames );
+  imageData->SetExtent( 0, zX-1, 0, zY-1, 0, zZ-1 );
+  //imageData->SetNumberOfScalarComponents( zFrames );
 
   // create the scalars for all of the images. set the element size
   // for the data we will read.
   switch ( rasMRI->type )
   {
   case MRI_UCHAR:
-    imageData->SetScalarTypeToUnsignedChar();
+    imageData->AllocateScalars(VTK_UNSIGNED_CHAR, zFrames);
     ucharScalars = vtkUnsignedCharArray::New();
     scalars = (vtkDataArray*) ucharScalars;
     zElement = sizeof( unsigned char );
     break;
   case MRI_INT:
-    imageData->SetScalarTypeToInt();
+    imageData->AllocateScalars(VTK_INT, zFrames);
     intScalars = vtkIntArray::New();
     scalars = (vtkDataArray*) intScalars;
     zElement = sizeof( int );
     break;
   case MRI_LONG:
-    imageData->SetScalarTypeToLong();
+    imageData->AllocateScalars(VTK_LONG, zFrames);
     longScalars = vtkLongArray::New();
     scalars = (vtkDataArray*) longScalars;
     zElement = sizeof( long );
     break;
   case MRI_FLOAT:
-    imageData->SetScalarTypeToFloat();
+    imageData->AllocateScalars(VTK_FLOAT, zFrames);
     floatScalars = vtkFloatArray::New();
     scalars = (vtkDataArray*) floatScalars;
     zElement = sizeof( float );
     break;
   case MRI_SHORT:
-    imageData->SetScalarTypeToShort();
+    imageData->AllocateScalars(VTK_SHORT, zFrames);
     shortScalars = vtkShortArray::New();
     scalars = (vtkDataArray*) shortScalars;
     zElement = sizeof( short );

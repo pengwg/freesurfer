@@ -1020,7 +1020,7 @@ void FSSurface::UpdateVerticesAndNormals()
   m_polydata->GetPointData()->SetNormals( newNormals );
   m_polydataVertices->SetPoints( newPoints );
   m_polydataWireframes->SetPoints( newPoints );
-  m_polydata->Update();
+ // m_polydata->Update();
 
   // if vector data exist
   UpdateVectors();
@@ -1092,7 +1092,7 @@ void FSSurface::UpdateVectors()
     vtkSmartPointer<vtkPolyData> testPolydata = vtkSmartPointer<vtkPolyData>::New();
     testPolydata->SetPoints(testPoints);
     vtkSmartPointer<vtkDelaunay3D> selectEnclosedPoints = vtkSmartPointer<vtkDelaunay3D>::New();
-    selectEnclosedPoints->SetInput(testPolydata);
+    selectEnclosedPoints->SetInputData(testPolydata);
     selectEnclosedPoints->Update();
 
     double p0[3], p1[3];
@@ -1177,7 +1177,7 @@ void FSSurface::UpdateVector2D( int nPlane, double slice_pos, vtkPolyData* conto
       pos[nPlane] = slice_pos;
       slicer->SetOrigin( pos );
       slicer->SetNormal( (nPlane==0), (nPlane==1), (nPlane==2) );
-      cutter->SetInput( m_polydataTarget );
+      cutter->SetInputData( m_polydataTarget );
       cutter->SetCutFunction( slicer );
       cutter->Update();
       target_polydata = cutter->GetOutput();
