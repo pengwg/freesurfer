@@ -8,6 +8,7 @@ if(PETSC_FOUND)
     ${CMAKE_SOURCE_DIR}/fem_elastic
     ${CMAKE_SOURCE_DIR}/packages/tetgen
     ${PETSC_INCLUDE_DIR}
+    ${MPI_INCLUDE_DIR}
   )
 
   # dmri_spline
