@@ -71,7 +71,7 @@ class vtkRGBAColorTransferFunctionInternals;
 #define VTK_CTF_LINEAR        0
 #define VTK_CTF_LOG10         1
 
-class VTK_EXPORT vtkRGBAColorTransferFunction : public vtkScalarsToColors
+class VTKCOMMONCORE_EXPORT vtkRGBAColorTransferFunction : public vtkScalarsToColors
 {
 public:
   static vtkRGBAColorTransferFunction *New();
