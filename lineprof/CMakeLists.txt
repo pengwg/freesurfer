@@ -1,5 +1,7 @@
 project(lineprof)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 if(ITK_FOUND AND VTK_FOUND AND PETSC_FOUND)
 
   include_directories(
@@ -36,6 +38,7 @@ if(ITK_FOUND AND VTK_FOUND AND PETSC_FOUND)
     ${LAPACK_LIBRARIES}
     ${BLAS_LIBRARIES}
     ${GFORTRAN_LIBRARIES}
+    ${QUADMATH_LIBRARIES}
     ${ITK_LIBRARIES}
   )
 

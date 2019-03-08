@@ -61,7 +61,7 @@ class PetscSolver
   typedef itk::ImageRegionConstIterator<MaskImageType> MaskConstIterator;
 
   int SetupIndexCorrespondence();
-  void SetupSystem();
+  int SetupSystem();
   int DistributeSolution();
 
   Vec sol, rhs;

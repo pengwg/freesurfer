@@ -44,9 +44,11 @@ PetscSolver::Update(double convergence)
   std::cout << " Linear System size = " << pixelCount << std::endl;
 
   ierr = MatCreate(PETSC_COMM_WORLD, &A); CHKERRQ(ierr);
+//  MatSetType(A, MATDENSE);
   ierr = MatSetSizes(A, PETSC_DECIDE, PETSC_DECIDE,
          pixelCount, pixelCount); CHKERRQ(ierr);
   ierr = MatSetFromOptions(A); CHKERRQ(ierr);
+  MatSetUp(A);
 
   ierr = VecCreate(PETSC_COMM_WORLD,&rhs); CHKERRQ(ierr);
   ierr = VecSetSizes(rhs, PETSC_DECIDE, pixelCount); CHKERRQ(ierr);
@@ -114,7 +116,7 @@ PetscSolver::SetupIndexCorrespondence()
   return count;
 }
 
-void
+int
 PetscSolver::SetupSystem()
 {
   typedef itk::ConstNeighborhoodIterator<MaskImageType> MaskCNIterator;
@@ -179,7 +181,8 @@ PetscSolver::SetupSystem()
         else map_rhs[ row ] += data_cni.GetPixel( *off_cit );
       } // next off_cit
 
-      MatSetValues( A, 1, &row, counter, pj, value, INSERT_VALUES );
+      PetscErrorCode ierr = MatSetValues( A, 1, &row, counter, pj, value, INSERT_VALUES );
+      CHKERRQ(ierr);
   }
     } // next indexCiter, maskCiter
 

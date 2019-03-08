@@ -662,6 +662,7 @@ TSolver<Cstr,n>::setup_matrix(bool showInfo)
   CHKERRQ(ierr);
   ierr = MatSetOption(m_stiffness, MAT_SYMMETRY_ETERNAL, PETSC_TRUE);
   CHKERRQ(ierr);
+  MatSetUp(m_stiffness);
 
   int iold_val = -1;
   for ( size_t i= size_t(0);
