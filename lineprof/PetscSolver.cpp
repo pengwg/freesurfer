@@ -47,6 +47,7 @@ PetscSolver::Update(double convergence)
   ierr = MatSetSizes(A, PETSC_DECIDE, PETSC_DECIDE,
          pixelCount, pixelCount); CHKERRQ(ierr);
   ierr = MatSetFromOptions(A); CHKERRQ(ierr);
+  MatSetUp(A);
 
   ierr = VecCreate(PETSC_COMM_WORLD,&rhs); CHKERRQ(ierr);
   ierr = VecSetSizes(rhs, PETSC_DECIDE, pixelCount); CHKERRQ(ierr);
