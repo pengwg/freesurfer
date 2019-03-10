@@ -199,6 +199,7 @@ if(BUILD_GUIS AND VTK_FOUND AND PETSC_FOUND AND TARGET vtkutils)
     set(QT_LIBRARIES ${QT_LIBRARIES} Qt5::X11Extras)
   endif()
 
+  include(${VTK_USE_FILE})
   add_executable(freeview ${SOURCES})
   target_link_libraries(freeview 
     vtkutils

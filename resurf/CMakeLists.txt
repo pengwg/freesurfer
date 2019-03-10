@@ -8,11 +8,10 @@ if(ITK_FOUND AND VTK_FOUND)
   include_directories(
     ${FS_INCLUDE_DIRS}
     ${ITK_INCLUDE_DIRS}
-    ${VTK_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}/anatomicuts/Code
     Code
   )
-  
+  include(${VTK_USE_FILE})
   #set (CMAKE_CXX_FLAGS "-fpermissive")
   add_executable(mris_multimodal mris_multimodal.cxx)
   target_link_libraries(mris_multimodal utils ${ITK_LIBRARIES} ${VTK_LIBRARIES})
