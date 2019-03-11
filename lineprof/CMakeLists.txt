@@ -4,7 +4,6 @@ if(ITK_FOUND AND VTK_FOUND AND PETSC_FOUND)
 
   include_directories(
     ${ITK_INCLUDE_DIRS}
-    ${VTK_INCLUDE_DIRS}
     ${PETSC_INCLUDE_DIR}
   )
 
@@ -21,6 +20,7 @@ if(ITK_FOUND AND VTK_FOUND AND PETSC_FOUND)
 
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
 
+  include(${VTK_USE_FILE})
   add_library(lineprof STATIC ${SOURCES})
 
   if(APPLE)
