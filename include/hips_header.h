@@ -43,6 +43,7 @@
  */
 
 /* The HIPS header as stored in memory */
+#include "hips_basic.h"
 
 struct header
 {

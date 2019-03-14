@@ -22,7 +22,7 @@
 
 #ifndef HIPS_BASIC_H
 #define HIPS_BASIC_H
-
+#include <stdio.h>
 /*
  * Machine-dependent portion
  *

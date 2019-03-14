@@ -295,7 +295,7 @@ set(SOURCES ${SOURCES}
   NrrdIO/write.c
   NrrdIO/formatNRRD.c
 )
-
+set(CMAKE_BUILD_TYPE Debug)
 add_library(utils STATIC ${SOURCES})
 
 target_link_libraries(utils

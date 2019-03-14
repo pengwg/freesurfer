@@ -1,5 +1,5 @@
 project(freeview)
-
+set(CMAKE_BUILD_TYPE Debug)
 if(BUILD_GUIS AND VTK_FOUND AND PETSC_FOUND AND TARGET vtkutils)
 
   include_directories(

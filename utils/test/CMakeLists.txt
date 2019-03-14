@@ -1,3 +1,4 @@
+set(CMAKE_BUILD_TYPE Debug)
 add_executable(topology_test EXCLUDE_FROM_ALL topology_test.c)
 target_link_libraries(topology_test utils)
 

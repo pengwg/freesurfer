@@ -42,9 +42,7 @@
 #ifndef HIPL_FORMAT_H
 #define HIPL_FORMAT_H
 
-#ifndef FILE
 #include <stdio.h>
-#endif
 #include <hips_basic.h>
 #include <hips_header.h>
 #include <hips_error.h>
