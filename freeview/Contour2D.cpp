@@ -27,6 +27,7 @@
 #include "RenderView2D.h"
 #include "vtkImageData.h"
 #include "vtkImageActor.h"
+#include "vtkImageMapper3D.h"
 #include "vtkImageReslice.h"
 #include "vtkImageThreshold.h"
 #include "vtkSimpleLabelEdgeFilter.h"
@@ -141,7 +142,7 @@ void Contour2D::SetInput( vtkImageData* imagedata, double dContourValue, double 
   m_filterResample->SetInputConnection( m_filterMask->GetOutputPort() );
   m_filterEdge->SetInputConnection( m_filterResample->GetOutputPort() );
   m_colormap->SetInputConnection( m_filterEdge->GetOutputPort() );
-  m_actorContour->SetInputData( m_colormap->GetOutput() );
+  m_actorContour->GetMapper()->SetInputConnection( m_colormap->GetOutputPort() );
 
   SetSmooth( m_bSmooth );
   UpdateSliceLocation( dSliceLocation );
@@ -293,7 +294,11 @@ void Contour2D::SetSmooth( bool bSmooth )
   if ( m_imageInput )
   {
     m_filterSmooth->SetInputData( m_imageInput );
-    m_filterThreshold->SetInputData( bSmooth ? m_filterSmooth->GetOutput() : m_imageInput );
+    if (m_bSmooth)
+      m_filterThreshold->SetInputConnection(m_filterSmooth->GetOutputPort());
+    else {
+      m_filterThreshold->SetInputData( m_imageInput );
+    }
   }
 }
 

@@ -214,7 +214,7 @@ int main(int narg, char* arg[])
 				vtkReader->Update();
 				
 				vtkSmartPointer<vtkSplineFilter> spline = vtkSmartPointer<vtkSplineFilter>::New();
-                spline->SetInputData(vtkReader->GetOutput());
+                spline->SetInputConnection(vtkReader->GetOutputPort());
 				spline->SetNumberOfSubdivisions(numberOfPoints);
 				spline->Update();
 				converter->SetVTKPolyData ( spline->GetOutput());

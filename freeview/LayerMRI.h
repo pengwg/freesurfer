@@ -410,7 +410,7 @@ protected:
   void BuildTensorGlyph( vtkImageData* imagedata,
                          int i, int j, int k,
                          double* pt, double scale,
-                         vtkPolyData* sourcepolydata,
+                         vtkPolyDataAlgorithm* sourcepolydata,
                          vtkUnsignedCharArray* scalars,
                          vtkPolyDataAlgorithm* a);
 

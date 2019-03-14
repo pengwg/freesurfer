@@ -291,7 +291,7 @@ void LayerLineProfile::MakeFlatTube(vtkPoints* points, vtkCellArray* lines, vtkA
 
   vtkSmartPointer<vtkCutter> cutter =
       vtkSmartPointer<vtkCutter>::New();
-  cutter->SetInputData( tube->GetOutput() );
+  cutter->SetInputConnection( tube->GetOutputPort() );
   cutter->SetCutFunction( plane );
 
   vtkSmartPointer<vtkStripper> stripper = vtkSmartPointer<vtkStripper>::New();
@@ -304,7 +304,7 @@ void LayerLineProfile::MakeFlatTube(vtkPoints* points, vtkCellArray* lines, vtkA
 
   vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
   triangleFilter->SetInputData( cutpoly );
-  mapper->SetInputData(tube->GetOutput());
+  mapper->SetInputConnection(tube->GetOutputPort());
   /*
   mapper->SetScalarVisibility(true);
   vtkSmartPointer<vtkLookupTable> lut = vtkSmartPointer<vtkLookupTable>::New();

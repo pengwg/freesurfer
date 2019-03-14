@@ -370,7 +370,7 @@ void GetMeshes(GetPot cl, const char* find1, const char* find2, std::vector<Basi
         reader->Update();
 
 		vtkSmartPointer<vtkSplineFilter> spline = vtkSmartPointer<vtkSplineFilter>::New();
-        spline->SetInputData(reader->GetOutput());
+        spline->SetInputConnection(reader->GetOutputPort());
 		spline->SetNumberOfSubdivisions(9);
 		spline->Update();
 

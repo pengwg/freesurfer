@@ -302,7 +302,7 @@ bool GenericRenderView::SaveImage(const QString& filename, bool bAntiAliasing, i
     vtkRenderLargeImage* image = vtkRenderLargeImage::New();
     image->SetInput(m_renderer);
     image->SetMagnification(nMag);
-    writer->SetInputData(image->GetOutput());
+    writer->SetInputConnection(image->GetOutputPort());
     writer->SetFileName(fn.toLatin1().data());
     writer->Write();
     image->Delete();

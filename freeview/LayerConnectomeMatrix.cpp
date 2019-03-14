@@ -338,7 +338,7 @@ void LayerConnectomeMatrix::RebuildSplineActors()
   tube->SetInputConnection(spline->GetOutputPort());
   tube->SetRadius(GetProperty()->GetSplineRadius()*voxel_len);
   tube->SetNumberOfSides(GetProperty()->GetNumberOfSides());
-  mapper->SetInputData(tube->GetOutput());
+  mapper->SetInputConnection(tube->GetOutputPort());
   mapper->SetScalarVisibility(0);
   m_actorSplines->SetMapper(mapper);
 
@@ -367,7 +367,7 @@ void LayerConnectomeMatrix::RebuildSplineActors()
     tube->SetInputConnection(cutter->GetOutputPort());
     tube->SetRadius(GetProperty()->GetSplineRadius()*voxel_len);
     tube->SetNumberOfSides(GetProperty()->GetNumberOfSides());
-    mapper->SetInputData(tube->GetOutput());
+    mapper->SetInputConnection(tube->GetOutputPort());
     mapper->SetScalarVisibility(0);
     m_actorSlice[i]->SetMapper(mapper);
   }

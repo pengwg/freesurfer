@@ -27,6 +27,7 @@
 #include "vtkRenderer.h"
 #include "vtkImageReslice.h"
 #include "vtkImageActor.h"
+#include "vtkImageMapper3D.h"
 #include "vtkPolyDataMapper.h"
 #include "vtkSmartPointer.h"
 #include "vtkMatrix4x4.h"
@@ -185,8 +186,8 @@ void LayerROI::InitializeActors()
     //
     // Prop in scene with plane mesh and texture.
     //
-    m_sliceActor2D[i]->SetInputData( mColorMap[i]->GetOutput() );
-    m_sliceActor3D[i]->SetInputData( mColorMap[i]->GetOutput() );
+    m_sliceActor2D[i]->GetMapper()->SetInputConnection( mColorMap[i]->GetOutputPort() );
+    m_sliceActor3D[i]->GetMapper()->SetInputConnection( mColorMap[i]->GetOutputPort() );
 
     // Set ourselves up.
     this->OnSlicePositionChanged( i );

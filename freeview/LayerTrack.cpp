@@ -278,7 +278,7 @@ vtkActor* LayerTrack::ConstructActor(vtkPoints *points, vtkCellArray *lines, vtk
     tube->SetInputData(polydata);
     tube->SetRadius(GetProperty()->GetTubeRadius());
     tube->SetNumberOfSides(GetProperty()->GetNumberOfSides());
-    mapper->SetInputData(tube->GetOutput());
+    mapper->SetInputConnection(tube->GetOutputPort());
     actor->SetMapper(mapper);
     /*
     mapper = vtkSmartPointer<vtkPolyDataMapper>::New();

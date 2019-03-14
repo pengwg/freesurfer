@@ -667,7 +667,7 @@ void LayerSurface::InitializeActors()
   tube->SetNumberOfSides(8);
   tube->SetRadius(0.04);
   tube->CappingOn();
-  mapper->SetInputData( tube->GetOutput() );
+  mapper->SetInputConnection( tube->GetOutputPort() );
   m_vectorActor->SetMapper( mapper );
   //  mapper->Update();
 

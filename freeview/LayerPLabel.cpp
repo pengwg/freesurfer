@@ -32,6 +32,7 @@
 #include "vtkFloatArray.h"
 #include "vtkPointData.h"
 #include "vtkImageMapToColors.h"
+#include "vtkImageMapper3D.h"
 #include "vtkLookupTable.h"
 #include "vtkMath.h"
 #include "LUTDataHolder.h"
@@ -189,8 +190,8 @@ bool LayerPLabel::LoadVolumeFiles()
   InitializeActors();
   for ( int i = 0; i < 3; i++ )
   {
-    m_sliceActor2D[i]->SetInputData( mReslice[i]->GetOutput() );
-    m_sliceActor3D[i]->SetInputData( mReslice[i]->GetOutput() );
+    m_sliceActor2D[i]->GetMapper()->SetInputConnection( mReslice[i]->GetOutputPort() );
+    m_sliceActor3D[i]->GetMapper()->SetInputConnection( mReslice[i]->GetOutputPort() );
   }
   return true;
 }

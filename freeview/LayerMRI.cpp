@@ -27,6 +27,7 @@
 #include "MainWindow.h"
 #include "vtkRenderer.h"
 #include "vtkImageActor.h"
+#include "vtkImageMapper3D.h"
 #include "vtkPolyDataMapper.h"
 #include "vtkSmartPointer.h"
 #include "vtkMatrix4x4.h"
@@ -895,8 +896,8 @@ void LayerMRI::InitializeActors()
     //
     // Prop in scene with plane mesh and texture.
     //
-    m_sliceActor2D[i]->SetInputData( mColorMap[i]->GetOutput() );
-    m_sliceActor3D[i]->SetInputData( mColorMap[i]->GetOutput() );
+    m_sliceActor2D[i]->GetMapper()->SetInputConnection( mColorMap[i]->GetOutputPort() );
+    m_sliceActor3D[i]->GetMapper()->SetInputConnection( mColorMap[i]->GetOutputPort() );
     
     mEdgeFilter[i] = vtkSmartPointer<vtkSimpleLabelEdgeFilter>::New();
     mResample[i] = vtkSmartPointer<vtkImageReslice>::New();
@@ -1269,15 +1270,15 @@ void LayerMRI::UpdateDisplayMode()
     if (GetProperty()->GetDisplayRGB())
     {
       vtkSmartPointer<vtkImageCast> cast = vtkSmartPointer<vtkImageCast>::New();
-      cast->SetInputData(mReslice[i]->GetOutput());
+      cast->SetInputConnection(mReslice[i]->GetOutputPort());
       cast->SetOutputScalarTypeToUnsignedChar();
-      m_sliceActor2D[i]->SetInputData( cast->GetOutput() );
-      m_sliceActor3D[i]->SetInputData( cast->GetOutput() );
+      m_sliceActor2D[i]->GetMapper()->SetInputConnection( cast->GetOutputPort() );
+      m_sliceActor3D[i]->GetMapper()->SetInputConnection( cast->GetOutputPort() );
     }
     else
     {
-      m_sliceActor2D[i]->SetInputData( mColorMap[i]->GetOutput() );
-      m_sliceActor3D[i]->SetInputData( mColorMap[i]->GetOutput() );
+      m_sliceActor2D[i]->GetMapper()->SetInputConnection( mColorMap[i]->GetOutputPort() );
+      m_sliceActor3D[i]->GetMapper()->SetInputConnection( mColorMap[i]->GetOutputPort() );
     }
   }
   if ( GetProperty()->GetDisplayVector() )
@@ -1689,8 +1690,8 @@ void LayerMRI::UpdateVectorActor( int nPlane, vtkImageData* imagedata, vtkImageD
     tube->SetNumberOfSides( 4 );
     tube->SetRadius( qMin( qMin( voxel_size[0], voxel_size[1] ), voxel_size[2] ) / 8 * GetProperty()->GetVectorLineWidth());
     tube->CappingOn();
-    vtkPolyDataMapper::SafeDownCast( m_glyphActor2D[nPlane]->GetMapper() )->SetInputData( tube->GetOutput() );
-    vtkPolyDataMapper::SafeDownCast( m_glyphActor3D[nPlane]->GetMapper() )->SetInputData( tube->GetOutput() );
+    vtkPolyDataMapper::SafeDownCast( m_glyphActor2D[nPlane]->GetMapper() )->SetInputConnection( tube->GetOutputPort() );
+    vtkPolyDataMapper::SafeDownCast( m_glyphActor3D[nPlane]->GetMapper() )->SetInputConnection( tube->GetOutputPort() );
   }
   else
   {
@@ -2019,7 +2020,6 @@ void LayerMRI::UpdateTensorActor( int nPlane, vtkImageData* imagedata_in )
     objsource = vtkSmartPointer<vtkCubeSource>::New();
   }
   objsource->Update();
-  vtkPolyData* srcpolydata = objsource->GetOutput();
   vtkSmartPointer<vtkUnsignedCharArray> scalars = vtkSmartPointer<vtkUnsignedCharArray>::New();
   scalars->SetNumberOfComponents( 4 );
   //  srcpolydata->GetPointData()->SetNormals( NULL );    // remove normals
@@ -2036,7 +2036,7 @@ void LayerMRI::UpdateTensorActor( int nPlane, vtkImageData* imagedata_in )
         pt[0] = orig[0] + voxel_size[0] * n[0];
         pt[1] = orig[1] + voxel_size[1] * i;
         pt[2] = orig[2] + voxel_size[2] * j;
-        BuildTensorGlyph( imagedata, n[0], i, j, pt, scale, srcpolydata, scalars, append ) ;
+        BuildTensorGlyph( imagedata, n[0], i, j, pt, scale, objsource, scalars, append ) ;
       }
     }
     break;
@@ -2048,7 +2048,7 @@ void LayerMRI::UpdateTensorActor( int nPlane, vtkImageData* imagedata_in )
         pt[0] = orig[0] + voxel_size[0] * i;
         pt[1] = orig[1] + voxel_size[1] * n[1];
         pt[2] = orig[2] + voxel_size[2] * j;
-        BuildTensorGlyph( imagedata, i, n[1], j, pt, scale, srcpolydata, scalars, append );
+        BuildTensorGlyph( imagedata, i, n[1], j, pt, scale, objsource, scalars, append );
       }
     }
     break;
@@ -2060,7 +2060,7 @@ void LayerMRI::UpdateTensorActor( int nPlane, vtkImageData* imagedata_in )
         pt[0] = orig[0] + voxel_size[0] * i;
         pt[1] = orig[1] + voxel_size[1] * j;
         pt[2] = orig[2] + voxel_size[2] * n[2];
-        BuildTensorGlyph( imagedata, i, j, n[2], pt, scale, srcpolydata, scalars, append );
+        BuildTensorGlyph( imagedata, i, j, n[2], pt, scale, objsource, scalars, append );
       }
     }
     break;
@@ -2079,7 +2079,7 @@ void LayerMRI::UpdateTensorActor( int nPlane, vtkImageData* imagedata_in )
 void LayerMRI::BuildTensorGlyph( vtkImageData* imagedata,
                                  int i, int j, int k,
                                  double* pt, double scale,
-                                 vtkPolyData* sourcepolydata,
+                                 vtkPolyDataAlgorithm* sourcepolydata,
                                  vtkUnsignedCharArray* scalars,
                                  vtkPolyDataAlgorithm* a)
 {
@@ -2166,7 +2166,7 @@ void LayerMRI::BuildTensorGlyph( vtkImageData* imagedata,
     c[1] = (int)(fabs( v[1][0] *255 ) );
     c[2] = (int)(fabs( v[2][0] *255 ) );
     c[3] = 255;
-    int nPts = sourcepolydata->GetPoints()->GetNumberOfPoints();
+    int nPts = sourcepolydata->GetOutput()->GetPoints()->GetNumberOfPoints();
     for ( int i = 0; i < nPts; i++ )
     {
       scalars->InsertNextTupleValue( c );
@@ -2175,9 +2175,9 @@ void LayerMRI::BuildTensorGlyph( vtkImageData* imagedata,
     vtkSmartPointer<vtkTransformPolyDataFilter> filter =
         vtkSmartPointer<vtkTransformPolyDataFilter>::New();
     filter->SetTransform( tr );
-    filter->SetInputData( sourcepolydata );
+    filter->SetInputConnection(sourcepolydata->GetOutputPort() );
     
-    a->AddInputData( filter->GetOutput() );
+    a->AddInputConnection( filter->GetOutputPort() );
   }
 }
 
@@ -3169,7 +3169,7 @@ bool LayerMRI::SaveContourToFile(const QString &fn)
   filter->SetInputData( vtkPolyDataMapper::SafeDownCast( m_actorContour->GetMapper())->GetInput() );
   filter->Update();
   vtkPolyDataWriter* writer = vtkPolyDataWriter::New();
-  writer->SetInputData( filter->GetOutput() );
+  writer->SetInputConnection( filter->GetOutputPort() );
   writer->SetFileName( fn.toLatin1().constData() );
   bool ret = writer->Write();
   writer->Delete();
@@ -3341,10 +3341,10 @@ void LayerMRI::UpdateProjectionMap()
       {
         mColorMapMaxProjection[i] = vtkSmartPointer<vtkImageMapToColors>::New();
         mColorMapMaxProjection[i]->SetLookupTable(GetProperty()->GetActiveLookupTable());
-        m_projectionMapActor[i]->SetInputData(mColorMapMaxProjection[i]->GetOutput());
+        m_projectionMapActor[i]->GetMapper()->SetInputConnection(mColorMapMaxProjection[i]->GetOutputPort());
         m_projectionMapActor[i]->InterpolateOff();
       }
-      mColorMapMaxProjection[i]->SetInputData(reslice->GetOutput());
+      mColorMapMaxProjection[i]->SetInputConnection(reslice->GetOutputPort());
     }
   }
   SetVisible(IsVisible());
@@ -3427,7 +3427,7 @@ void LayerMRI::SetMaskLayer(LayerMRI *layer_mask)
     resampler->SetOutputSpacing(s1);
     resampler->SetInterpolationModeToNearestNeighbor();
     threshold->ThresholdByUpper(m_dMaskThreshold);
-    threshold->SetInputData(resampler->GetOutput());
+    threshold->SetInputConnection(resampler->GetOutputPort());
     threshold->ReplaceInOn();
     threshold->ReplaceOutOn();
     threshold->SetInValue(1);
@@ -3472,7 +3472,7 @@ void LayerMRI::Threshold(int frame, LayerMRI* src, int src_frame, double th_low,
       vtkSmartPointer<vtkImageExtractComponents> extract = vtkSmartPointer<vtkImageExtractComponents>::New();
       extract->SetInputData(image);
       extract->SetComponents(src_frame);
-      threshold->SetInputData(extract->GetOutput());
+      threshold->SetInputConnection(extract->GetOutputPort());
     }
     else
     {

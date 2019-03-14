@@ -189,7 +189,7 @@ void LayerLandmarks::UpdateActors(bool bBuild3D)
       vtkSmartPointer<vtkSphereSource> ball = vtkSmartPointer<vtkSphereSource>::New();
       vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
       ball->SetRadius(m_dRadius);
-      mapper->SetInputData(ball->GetOutput());
+      mapper->SetInputConnection(ball->GetOutputPort());
       m_landmarks[i].actorSphere->SetMapper(mapper);
       m_landmarks[i].actorSphere->SetPosition(m_landmarks[i].pos);
     }

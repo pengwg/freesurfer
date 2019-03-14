@@ -67,7 +67,7 @@ VolumeCropper::VolumeCropper( QObject* parent ) :
     m_actorSphere[i]->VisibilityOff();
     m_sphereSource[i] = vtkSmartPointer<vtkSphereSource>::New();
     vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    mapper->SetInputData( m_sphereSource[i]->GetOutput() );
+    mapper->SetInputConnection( m_sphereSource[i]->GetOutputPort() );
     m_actorSphere[i]->SetMapper( mapper );
     m_actorSphere[i]->GetProperty()->SetColor( 1, 1, 0 );
   }
@@ -78,7 +78,7 @@ VolumeCropper::VolumeCropper( QObject* parent ) :
   m_actorActivePlane->GetProperty()->SetColor( 1, 0, 0 );
   m_planeSource = vtkSmartPointer<vtkPlaneSource>::New();
   vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper->SetInputData( m_planeSource->GetOutput() );
+  mapper->SetInputConnection( m_planeSource->GetOutputPort() );
   m_actorActivePlane->SetMapper( mapper );
 
   m_actorBox2D = vtkSmartPointer<vtkActor>::New();
@@ -99,22 +99,22 @@ VolumeCropper::VolumeCropper( QObject* parent ) :
     m_actorActivePlane2D[i]->GetProperty()->SetDiffuse( 0.0 );
     m_actorActivePlane2D[i]->GetProperty()->SetAmbient( 1.0 );
     mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    mapper->SetInputData( m_planeSource->GetOutput() );
+    mapper->SetInputConnection( m_planeSource->GetOutputPort() );
     m_actorActivePlane2D[i]->SetMapper( mapper );
   }
 
   m_boxSource = vtkSmartPointer<vtkCubeSource>::New();
   mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper->SetInputData( m_boxSource->GetOutput() );
+  mapper->SetInputConnection( m_boxSource->GetOutputPort() );
   m_actorBox->SetMapper( mapper );
   mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper->SetInputData( m_boxSource->GetOutput() );
+  mapper->SetInputConnection( m_boxSource->GetOutputPort() );
   m_actorFrame->SetMapper( mapper );
   mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper->SetInputData( m_boxSource->GetOutput() );
+  mapper->SetInputConnection( m_boxSource->GetOutputPort() );
   m_actorBox2D->SetMapper( mapper );
   mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper->SetInputData( m_boxSource->GetOutput() );
+  mapper->SetInputConnection( m_boxSource->GetOutputPort() );
   m_actorFrame2D->SetMapper( mapper );
   m_box = vtkSmartPointer<vtkBox>::New();
 
@@ -244,7 +244,7 @@ void VolumeCropper::UpdateProps()
   if ( mapper && mapper->GetInput() && m_clipper->GetOutput() != mapper->GetInput() )
   {
     m_clipper->SetInputData( mapper->GetInput() );
-    mapper->SetInputData( m_clipper->GetOutput() );
+    mapper->SetInputConnection( m_clipper->GetOutputPort() );
   }
 
   emit CropBoundChanged( m_mri );

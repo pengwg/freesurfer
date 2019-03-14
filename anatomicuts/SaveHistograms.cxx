@@ -125,7 +125,7 @@ int main(int narg, char*  arg[])
 			vtkSmartPointer<vtkPolyDataReader> vtkReader = vtkPolyDataReader::New();
 			vtkReader->SetFileName ( fiberFile);
 			vtkReader->Update();
-            spline->SetInputData( vtkReader->GetOutput() );
+            spline->SetInputConnection(vtkReader->GetOutputPort() );
 		}
 		spline->Update();
 		converter->SetVTKPolyData ( spline->GetOutput() );

@@ -114,7 +114,7 @@ void SurfaceSpline::BuildSphereActor(vtkActor* actor, vtkPoints* pts)
     append->AddInputData( sphere->GetOutput() );
   }
   vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper->SetInputData( append->GetOutput() );
+  mapper->SetInputConnection( append->GetOutputPort() );
   actor->SetMapper(mapper);
 }
 
@@ -174,10 +174,10 @@ void SurfaceSpline::RebuildActors()
       vtkSmartPointer<vtkSplineFilter> spline = vtkSmartPointer<vtkSplineFilter>::New();
       spline->SetInputData(polydata);
       vtkSmartPointer<vtkTubeFilter> tube = vtkSmartPointer<vtkTubeFilter>::New();
-      tube->SetInputData(spline->GetOutput());
+      tube->SetInputConnection(spline->GetOutputPort());
       tube->SetNumberOfSides(8);
       tube->SetRadius(0.25);
-      mapper->SetInputData(tube->GetOutput());
+      mapper->SetInputConnection(tube->GetOutputPort());
       BuildSphereActor(m_actorSpheres, points);
     }
     for (int n = 0; n < 3; n++)
@@ -214,7 +214,7 @@ void SurfaceSpline::RebuildActors()
       tube->SetInputData(spline_poly);
       tube->SetNumberOfSides(8);
       tube->SetRadius(0.25);
-      mapper2d[n]->SetInputData(tube->GetOutput());
+      mapper2d[n]->SetInputConnection(tube->GetOutputPort());
       BuildSphereActor(m_actor2DSpheres[n], ctrl_points);
     }
   }

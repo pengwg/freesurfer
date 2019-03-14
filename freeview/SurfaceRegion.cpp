@@ -201,7 +201,7 @@ bool SurfaceRegion::Close()
     }
     else
     {
-      mapper->SetInputData( m_cleanerPost->GetOutput() );
+      mapper->SetInputConnection( m_cleanerPost->GetOutputPort() );
       vtkPolyData* polydata = m_selector->GetOutput();
       return ( polydata && polydata->GetPoints() && polydata->GetPoints()->GetNumberOfPoints() > 0 );
     }

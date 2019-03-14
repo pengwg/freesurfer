@@ -417,7 +417,7 @@ void LayerPointSet::RebuildActors( bool bRebuild3D )
   vtkPolyDataMapper* mapper = vtkPolyDataMapper::New();
   if ( m_points.size() > 0 && radius > 0 )
   {
-    mapper->SetInputData( append->GetOutput() );
+    mapper->SetInputConnection( append->GetOutputPort() );
   }
   else
   {
@@ -426,7 +426,7 @@ void LayerPointSet::RebuildActors( bool bRebuild3D )
   m_actorBalls->SetMapper( mapper );
   mapper->Delete();
 
-  vtkPolyData* polydata_tube = NULL;
+  vtkTubeFilter* tube = NULL;
   if ( GetProperty()->GetShowSpline() )
   {
     vtkPolyData* polydata = vtkPolyData::New();
@@ -443,14 +443,13 @@ void LayerPointSet::RebuildActors( bool bRebuild3D )
 //      polydata->Update();
       UpdateScalars(polydata);
       spline->SetInputData( polydata );
-      vtkTubeFilter* tube = vtkTubeFilter::New();
+      tube = vtkTubeFilter::New();
       tube->SetNumberOfSides( NUM_OF_SIDES );
       tube->SetInputConnection( spline->GetOutputPort() );
       tube->SetRadius( GetProperty()->GetSplineRadius() * scale );
       tube->CappingOn();
       m_mapper->SetInputConnection( tube->GetOutputPort() );
       tube->Update();
-      polydata_tube = tube->GetOutput();
       m_actorSpline->SetMapper( m_mapper );
       tube->Delete();
     }
@@ -516,7 +515,7 @@ void LayerPointSet::RebuildActors( bool bRebuild3D )
     m_actorSlice[i]->SetMapper( mapper );
 
     // 2D tube
-    if (polydata_tube)
+    if (tube)
     {
       vtkSmartPointer<vtkPlane> plane = vtkSmartPointer<vtkPlane>::New();
       plane->SetOrigin( m_dSlicePosition );
@@ -524,7 +523,7 @@ void LayerPointSet::RebuildActors( bool bRebuild3D )
 
       vtkSmartPointer<vtkCutter> cutter =
           vtkSmartPointer<vtkCutter>::New();
-      cutter->SetInputData(polydata_tube);
+      cutter->SetInputConnection(tube->GetOutputPort());
       cutter->SetCutFunction( plane );
 
       vtkSmartPointer<vtkStripper> stripper = vtkSmartPointer<vtkStripper>::New();
@@ -540,7 +539,7 @@ void LayerPointSet::RebuildActors( bool bRebuild3D )
       triangleFilter->SetInputData( cutpoly );
 
       mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-      mapper->SetInputData(triangleFilter->GetOutput());
+      mapper->SetInputConnection(triangleFilter->GetOutputPort());
 
       m_actorSplineSlice[i]->SetMapper(mapper);
     }

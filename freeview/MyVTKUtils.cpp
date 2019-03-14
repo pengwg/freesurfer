@@ -139,7 +139,7 @@ bool MyVTKUtils::VTKScreenCapture( vtkRenderWindow* renderWnd,
     vtkRenderLargeImage* image = vtkRenderLargeImage::New();
     image->SetInput( renderer );
     image->SetMagnification( nMag );
-    writer->SetInputData( image->GetOutput() );
+    writer->SetInputConnection(image->GetOutputPort() );
     writer->SetFileName( fn.toUtf8().data() );
     writer->Write();
     if ( writer->GetErrorCode() != 0 )
