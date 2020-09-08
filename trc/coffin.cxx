@@ -1538,13 +1538,13 @@ void Coffin::SetPathway(const std::string InitFile,
 
       prfile.open(prname.str(), ios::in);
       if (!prfile) {
-        cout << "ERROR: Could not open " << prname << endl;
+        cout << "ERROR: Could not open " << prname.str() << endl;
         exit(1);
       }
 
       idfile.open(idname.str(), ios::in);
       if (!idfile) {
-        cout << "ERROR: Could not open " << idname << endl;
+        cout << "ERROR: Could not open " << idname.str() << endl;
         exit(1);
       }
 
@@ -1563,8 +1563,8 @@ void Coffin::SetPathway(const std::string InitFile,
 
         if (prior.size() != idlist.size() + 1) {
           cout << "ERROR: Line length mismatch between "
-               << prname << " (" << prline << ") and "
-               << idname << " (" << idline << ")" << endl;
+               << prname.str() << " (" << prline << ") and "
+               << idname.str() << " (" << idline << ")" << endl;
           exit(1);
         } 
 
@@ -1620,13 +1620,13 @@ void Coffin::SetPathway(const std::string InitFile,
 
       prfile.open(prname.str(), ios::in);
       if (!prfile) {
-        cout << "ERROR: Could not open " << prname << endl;
+        cout << "ERROR: Could not open " << prname.str() << endl;
         exit(1);
       }
 
       idfile.open(idname.str(), ios::in);
       if (!idfile) {
-        cout << "ERROR: Could not open " << idname << endl;
+        cout << "ERROR: Could not open " << idname.str() << endl;
         exit(1);
       }
 
