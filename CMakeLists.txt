@@ -158,6 +158,7 @@ if(BUILD_GUIS)
     # in the nvidia drivers, so as a temporary fix, link directly to the nvidia GL library
     list(APPEND CMAKE_PREFIX_PATH "/usr/lib64/nvidia")
   endif()
+  cmake_policy(SET CMP0072 OLD)
   find_package(OpenGL)
   if(OPENGL_FOUND)
     add_definitions(-DHAVE_OPENGL)
@@ -261,7 +262,7 @@ endif()
 
 # warnings
 if(NOT NO_CXX_WARN)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -Wno-sign-compare -Wno-unused-result -Wno-unused-parameter")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-sign-compare -Wno-unused-result -Wno-unused-parameter")
 else ()
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error -Wno-deprecated-declarations -fpermissive") 
 endif()
