@@ -27,7 +27,7 @@ add_executable(
   RegRobust.cpp
   RegPowell.cpp
 )
-target_link_libraries(mri_robust_register utils ${FORTRAN_LIBS})
+target_link_libraries(mri_robust_register utils ${FORTRAN_LIBS} quadmath)
 add_help(mri_robust_register mri_robust_register.help.xml)
 install(TARGETS mri_robust_register DESTINATION bin)
 
@@ -43,7 +43,7 @@ add_executable(
   Quaternion.cpp
   MultiRegistration.cpp
 )
-target_link_libraries(mri_robust_template utils ${FORTRAN_LIBS})
+target_link_libraries(mri_robust_template utils ${FORTRAN_LIBS} quadmath)
 add_help(mri_robust_template mri_robust_template.help.xml)
 add_test_script(NAME mri_robust_template_test SCRIPT test.sh DEPENDS mri_robust_template)
 install(TARGETS mri_robust_template DESTINATION bin)

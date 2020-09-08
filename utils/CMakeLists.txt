@@ -218,6 +218,7 @@ target_link_libraries(utils
   nifti
   gifti
   expat
+  z
   ${ZLIB_LIBRARIES}
   ${ITK_LIBRARIES}
   ${OMP_CXX_LIBRARIES}

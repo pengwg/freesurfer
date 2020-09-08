@@ -65,6 +65,7 @@ if(PETSC_FOUND)
     ${LAPACK_LIBRARIES}
     ${BLAS_LIBRARIES}
     ${GFORTRAN_LIBRARIES}
+    quadmath
   )
   install(TARGETS surf2vol DESTINATION bin)
 
