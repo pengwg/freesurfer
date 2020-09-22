@@ -7,10 +7,6 @@
 #include "vtkRenderingCoreModule.h"
 
 #include "qsystemdetection.h"
-#ifdef Q_OS_OSX
-#  include "vtkRenderingOpenGL2Module.h"
-#else
-#  include "vtkRenderingOpenGLModule.h"
-#endif
+#include "vtkRenderingOpenGL2Module.h"
 
 #endif

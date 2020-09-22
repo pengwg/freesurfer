@@ -169,8 +169,7 @@ if(BUILD_GUIS)
 endif()
 
 # -------- vtk --------
-set(VTK_DIR ${FS_PACKAGES_DIR}/vtk/7.1 CACHE PATH "VTK install directory")
-find_package(VTK HINTS ${VTK_DIR})
+find_package(VTK)
 if(VTK_FOUND AND VTK_BUILD_SHARED_LIBS)
   # locate all shared vtk libraries
   if(${VTK_VERSION} LESS 7)
