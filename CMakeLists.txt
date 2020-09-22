@@ -164,7 +164,7 @@ if(BUILD_GUIS)
   endif()
 
   # -------- qt --------
-  find_package(QT)
+  find_package(Qt5 COMPONENTS Core Widgets X11Extras)
 
 endif()
 
