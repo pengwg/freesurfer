@@ -1,5 +1,7 @@
 project(lineprof)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 if(ITK_FOUND AND VTK_FOUND AND PETSC_FOUND)
 
   include_directories(
@@ -7,6 +9,7 @@ if(ITK_FOUND AND VTK_FOUND AND PETSC_FOUND)
     ${ITK_INCLUDE_DIRS}
     ${VTK_INCLUDE_DIRS}
     ${PETSC_INCLUDE_DIR}
+    ${MPI_CXX_INCLUDE_DIRS}
   )
 
   # temporary macro to deal with BoundingBoxType
@@ -34,6 +37,7 @@ if(ITK_FOUND AND VTK_FOUND AND PETSC_FOUND)
     ${ZLIB_LIBRARIES}
     ${VTK_LIBRARIES}
     ${PETSC_LIBRARIES}
+    ${MPI_LIBRARIES}
     ${LAPACK_LIBRARIES}
     ${BLAS_LIBRARIES}
     ${GFORTRAN_LIBRARIES}

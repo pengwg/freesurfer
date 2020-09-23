@@ -26,9 +26,9 @@
 #ifndef NO_CVS_UP_IN_HERE
 // Needed for CVS - these must be included first or else they don't compile
 #include <cmath>
-#undef SEEK_SET
-#undef SEEK_END
-#undef SEEK_CUR
+//#undef SEEK_SET
+//#undef SEEK_END
+//#undef SEEK_CUR
 #include <mpi.h>
 #include "../fem_elastic/morph.h"
 #include "../fem_elastic/surf_utils.h"

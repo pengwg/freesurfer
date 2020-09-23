@@ -7,6 +7,7 @@ if(PETSC_FOUND)
     SYSTEM
     ${CMAKE_SOURCE_DIR}/packages/tetgen
     ${PETSC_INCLUDE_DIR}
+    ${MPI_CXX_INCLUDE_DIRS}
     ${ITK_INCLUDE_DIRS}
   )
 
@@ -62,6 +63,7 @@ if(PETSC_FOUND)
     utils
     tetgen
     ${PETSC_LIBRARIES}
+    ${MPI_CXX_LIBRARIES}
     ${LAPACK_LIBRARIES}
     ${BLAS_LIBRARIES}
     ${GFORTRAN_LIBRARIES}
