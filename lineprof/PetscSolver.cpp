@@ -153,6 +153,8 @@ PetscSolver::SetupSystem()
   int pj[5], counter=0;
   int row;
   PetscScalar value[5];
+  MatSetUp(A);
+
   //int dbgCount = 0;
   for( index_cni.GoToBegin(), mask_cni.GoToBegin(), data_cni.GoToBegin();
        !index_cni.IsAtEnd();

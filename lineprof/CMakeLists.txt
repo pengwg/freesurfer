@@ -1,7 +1,5 @@
 project(lineprof)
 
-set(CMAKE_BUILD_TYPE Debug)
-
 if(ITK_FOUND AND VTK_FOUND AND PETSC_FOUND)
 
   include_directories(
