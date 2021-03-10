@@ -2,6 +2,8 @@ project(talairach_avi)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-invalid-boz")
+
 if("${CMAKE_Fortran_COMPILER_ID}" MATCHES "Intel")
   set(ICC_LIBRARIES irc svml imf)
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ax=CORE-AVX512 -qopenmp -132 -nofor_main")
