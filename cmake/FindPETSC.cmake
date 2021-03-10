@@ -1,7 +1,7 @@
 # PETSC Find Module
 
 if(NOT PETSC_DIR)
-  set(PETSC_DIR /usr/lib/petscdir/petsc3.12/x86_64-linux-gnu-real/)
+  set(PETSC_DIR /usr/lib/petscdir/petsc3.13/x86_64-linux-gnu-real/)
 endif()
 
 find_path(PETSC_INCLUDE_DIR HINTS ${PETSC_DIR} NAMES petsc.h PATH_SUFFIXES include)
