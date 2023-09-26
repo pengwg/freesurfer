@@ -319,7 +319,7 @@ if(NOT Qt6_DIR)
   endif()
 endif()
 
-  find_package(QT)
+  find_package(Qt5 COMPONENTS Core Widgets X11Extras)
 
   if(Qt6_DIR)
      message(STATUS "For HOST_OS=${HOST_OS} Qt6_DIR=${Qt6_DIR}")
@@ -349,7 +349,7 @@ if(NOT VTK_DIR)
    endif()
 endif()
 
-find_package(VTK HINTS ${VTK_DIR})
+find_package(VTK)
 message(STATUS "For HOST_OS=${HOST_OS} VTK_DIR=${VTK_DIR}")
 
 if(VTK_FOUND AND VTK_BUILD_SHARED_LIBS)
