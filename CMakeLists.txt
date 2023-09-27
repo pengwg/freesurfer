@@ -54,7 +54,7 @@ option(PATCH_FSPYTHON "Build subdirs with source using gfortran" OFF)
 #  without explicit breaks on every case.  This desired fallthrough behavior causes false
 #  compiler errors with "-Werror" turned on.  The WARNING_AS_ERROR option allows temporarily
 #  disabling warnings as errors to allow a more gradual move to supporting new compilers.
-option(WARNING_AS_ERROR "Convert build warnings to errors" ON)
+option(WARNING_AS_ERROR "Convert build warnings to errors" OFF)
 option(MARTINOS_BUILD "Does the build have access to the martinos network" ON)
 
 if(NOT APPLE)
