@@ -442,7 +442,7 @@ if(NOT ITK_DIR)
    endif()
 endif()
 
-find_package(ITK HINTS ${ITK_DIR} REQUIRED COMPONENTS ITKCommon ITKIOImageBase )
+find_package(ITK HINTS ${ITK_DIR} REQUIRED COMPONENTS ITKCommon ITKIOImageBase ITKTransform ITKSpatialObjects)
 message(STATUS "For HOST_OS=${HOST_OS} ITK_DIR=${ITK_DIR}")
 
 # ------ list where the build tree is ------
