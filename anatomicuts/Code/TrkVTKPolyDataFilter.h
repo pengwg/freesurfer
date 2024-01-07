@@ -3,7 +3,6 @@
 #include "TrackIO.h"
 
 #include "itkProcessObject.h"
-#include "itkPolylineCell.h"
 #include <vtkSmartPointer.h>
 
 #include "itkImageFileReader.h"

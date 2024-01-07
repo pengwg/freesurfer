@@ -34,6 +34,7 @@
 #include "vtkImageLogic.h"
 #include "vtkImageMapper3D.h"
 #include <QDebug>
+#include <cmath>
 
 #define IMAGE_RESAMPLE_FACTOR     4.0     // must be multiples of 2
 

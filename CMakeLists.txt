@@ -22,7 +22,7 @@ endif()
 
 # set the default language dialect settings (This must be done BEFORE the project call)
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 11)
+  set(CMAKE_CXX_STANDARD 14)
 endif()
 if(NOT CMAKE_CXX_STANDARD_REQUIRED)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -72,7 +72,7 @@ endif()
 #  without explicit breaks on every case.  This desired fallthrough behavior causes false
 #  compiler errors with "-Werror" turned on.  The WARNING_AS_ERROR option allows temporarily
 #  disabling warnings as errors to allow a more gradual move to supporting new compilers.
-option(WARNING_AS_ERROR "Convert build warnings to errors" ON)
+option(WARNING_AS_ERROR "Convert build warnings to errors" OFF)
 option(MARTINOS_BUILD "Does the build have access to the martinos network" ON)
 
 if(NOT APPLE)
@@ -442,7 +442,7 @@ if(NOT ITK_DIR)
    endif()
 endif()
 
-find_package(ITK HINTS ${ITK_DIR} REQUIRED)
+find_package(ITK HINTS ${ITK_DIR} REQUIRED COMPONENTS ITKCommon ITKIOImageBase )
 message(STATUS "For HOST_OS=${HOST_OS} ITK_DIR=${ITK_DIR}")
 
 # ------ list where the build tree is ------
