@@ -204,7 +204,8 @@ void TrkVTKPolyDataFilter<TImage>::VTKToTrk(std::string outputName)
 	trkwriter.UpdateHeader(trkheadout);
 	vtkCellArray *lines = m_vtk->GetLines();
 	lines->InitTraversal();
-	vtkIdType pointCount, *pointBuf;
+        vtkIdType pointCount;
+        const vtkIdType *pointBuf;
 	vnl_matrix<float> vox_to_ras = vnl_matrix<float>(4,4);
 	double sum=0;
 	for (int k1 = 0; k1 < 4; k1++) 

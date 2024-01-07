@@ -1,4 +1,6 @@
 #include "AppendBundleFilter.h"
+#include "vtkCellData.h"
+#include "vtkFieldData.h"
 typedef struct {
 	unsigned char r;
 	unsigned char g;
@@ -61,15 +63,16 @@ void AppendBundleFilter::Update()
 		int index =((int)47.*((i%colorNumber)%(150)))%197+5;
 		index = (int)(13*(i%colorNumber))%150+65;
 		//  std::cout << "index " << index << std::endl;
-		unsigned char color[3] = { table[index].r, table[index].g,table[index].b};
+                unsigned char color[3] = { table[index].r, table[index].g,table[index].b};
 
-		vtkIdType pointCount=0, *pointBuf=0;
+                vtkIdType pointCount=0;
+                const vtkIdType *pointBuf=0;
 		if(rep)
 		{
 			vtkFieldData *fieldData = bundle->GetFieldData();
 			//this is not fine, i knoww 0 will be the representatives index, or weight of fibers
 			//vtkIntArray *arrayCellData = (vtkIntArray*) fieldData->GetArray("RepresentativeIndex");
-			vtkIntArray *arrayCellData = (vtkIntArray*) fieldData->GetArray(0);
+                        vtkIntArray *arrayCellData = (vtkIntArray*) fieldData->GetArray(0);
 
 			if(arrayCellData != NULL)
 			{
@@ -87,7 +90,7 @@ void AppendBundleFilter::Update()
 				//            std::cout <<" rep " << cellId << std::endl;
 				for (vtkIdType k=0; k<pointCount; k++)
 				{
-					pointBuf[k] = allPoints->InsertNextPoint ( bundle->GetPoint ( pointBuf[k] ) );
+                                        const_cast<vtkIdType*>(pointBuf)[k] = allPoints->InsertNextPoint ( bundle->GetPoint ( pointBuf[k] ) );
 				}
 				intArrayRepresentativesWeights->InsertNextValue(bundle->GetNumberOfLines());
 				allBundles->InsertNextCell (VTK_POLY_LINE, pointCount, pointBuf);
@@ -117,9 +120,9 @@ void AppendBundleFilter::Update()
 			*/
 			while ( lines->GetNextCell(pointCount, pointBuf) )
 			{
-				for (vtkIdType k=0; k<pointCount; k++)
+                                for (vtkIdType k=0; k<pointCount; k++)
 				{
-					pointBuf[k] = allPoints->InsertNextPoint ( bundle->GetPoint ( pointBuf[k] ) );
+                                        const_cast<vtkIdType*>(pointBuf)[k] = allPoints->InsertNextPoint ( bundle->GetPoint ( pointBuf[k] ) );
 				}
 
 				allBundles->InsertNextCell (VTK_POLY_LINE, pointCount, pointBuf);

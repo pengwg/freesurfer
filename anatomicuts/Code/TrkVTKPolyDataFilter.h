@@ -6,8 +6,8 @@
 #include "itkPolylineCell.h"
 #include <vtkSmartPointer.h>
 
-#include "vtkCellData.h"
 #include "itkImageFileReader.h"
+#include "vtkPolyData.h"
 
 //class vtkPolyData;
 

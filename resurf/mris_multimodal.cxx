@@ -53,7 +53,7 @@ MRIS* VTKToSurf(vtkSmartPointer<vtkPolyData> vtkSurface)
 
 	// Copy in the faces.
 	vtkIdType cPointIDs = 0;
-	vtkIdType* pPointIDs = NULL;
+        const vtkIdType* pPointIDs = NULL;
 	vtkCellArray* polys = vtkSurface->GetPolys();
 	assert( polys );
 	vtkIdType nFace = 0;
