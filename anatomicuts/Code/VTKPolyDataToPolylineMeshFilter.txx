@@ -94,7 +94,8 @@ outputMesh->SetCellData (i, val);
 
     vtkCellArray *lines = m_VTKPolyData->GetLines();
     lines->InitTraversal();
-    vtkIdType pointCount, *pointBuf;
+    vtkIdType pointCount;
+    const vtkIdType *pointBuf;
     while ( lines->GetNextCell(pointCount, pointBuf) )
     {
 

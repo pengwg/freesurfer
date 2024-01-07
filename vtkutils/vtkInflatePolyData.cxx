@@ -30,11 +30,9 @@
 #include "vtkInformation.h"
 #include "vtkInformationVector.h"
 #include "vtkObjectFactory.h"
-#include "vtkPointData.h"
 #include "vtkPolyData.h"
 #include "vtkPolygon.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
-#include "vtkTriangle.h"
 
 vtkStandardNewMacro(vtkInflatePolyData);
 
@@ -139,7 +137,7 @@ vtkInflatePolyData::RequestData ( vtkInformation *vtkNotUsed(iRequest),
   // For each polygon...
   vtkIdType cellID = 0;
   vtkIdType cPoints = 0;
-  vtkIdType* pPoints = NULL;
+  const vtkIdType* pPoints = NULL;
   for( polys->InitTraversal(); 
        polys->GetNextCell( cPoints, pPoints ); cellID++ ) {
     

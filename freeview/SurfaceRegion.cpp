@@ -187,7 +187,7 @@ bool SurfaceRegion::Close()
       vtkSmartPointer<vtkCellArray> new_polys = vtkSmartPointer<vtkCellArray>::New();
       polys->InitTraversal();
       vtkIdType npts;
-      vtkIdType* pts;
+      const vtkIdType* pts;
       while ( polys->GetNextCell( npts, pts ) )
       {
         bool bFound = false;
@@ -326,7 +326,7 @@ bool SurfaceRegion::WriteBody( FILE* fp )
   }
   strg += QString( "POLYGONS %1\n" ).arg( polys->GetNumberOfCells() );
   vtkIdType nPts;
-  vtkIdType* pts = NULL;
+  const vtkIdType* pts = NULL;
   polys->InitTraversal();
   while ( polys->GetNextCell( nPts, pts ) )
   {
@@ -443,7 +443,7 @@ bool SurfaceRegion::DeleteCell( RenderView3D* view, int pos_x, int pos_y )
     vtkCellArray* polys = polydata->GetPolys();
     polys->InitTraversal();
     vtkIdType npts;
-    vtkIdType* pts;
+    const vtkIdType* pts;
     int nId = 0;
     while ( polys->GetNextCell( npts, pts ) )
     {

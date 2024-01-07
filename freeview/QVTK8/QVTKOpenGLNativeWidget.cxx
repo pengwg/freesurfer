@@ -30,6 +30,7 @@
 #include "QVTKInteractor.h"
 #include "QVTKInteractorAdapter.h"
 #include "vtkCommand.h"
+#include "vtkOpenGLFramebufferObject.h"
 #include "vtkGenericOpenGLRenderWindow.h"
 #include "vtkInteractorStyleTrackballCamera.h"
 #include "vtkNew.h"
@@ -505,7 +506,7 @@ void QVTKOpenGLNativeWidget::paintGL()
   }
 
   if (!this->FBO
-    || this->FBO->handle() != this->RenderWindow->GetDefaultFrameBufferId())
+      || this->FBO->handle() != this->RenderWindow->GetDisplayFramebuffer()->GetFBOIndex())
   {
     this->recreateFBO();
   }
@@ -547,7 +548,7 @@ void QVTKOpenGLNativeWidget::paintGL()
     f->glReadBuffer(GL_COLOR_ATTACHMENT0);
 
     // The viewport state may be modified outside the vtkOpenGLState mechanism, so reset the state here.
-    ostate->ResetGlViewportState();
+    ostate->ResetGLViewportState();
 
     // If you get a vtkOpenGLState warning from the call below, you can add
     // a call to ostate->ResetEnumState(GL_SCISSOR_TEST); to reset the cache state
@@ -650,7 +651,7 @@ bool QVTKOpenGLNativeWidget::renderVTK()
 {
   vtkQVTKOpenGLNativeWidgetDebugMacro("renderVTK");
   Q_ASSERT(this->FBO);
-  Q_ASSERT(this->FBO->handle() == this->RenderWindow->GetDefaultFrameBufferId());
+  Q_ASSERT(this->FBO->handle() == this->RenderWindow->GetDisplayFramebuffer()->GetFBOIndex());
 
   // Bind the FBO we'll be rendering into. This may not be needed, since VTK will
   // bind it anyways, but we'll be extra cautious.
