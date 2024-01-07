@@ -8,11 +8,10 @@ if(VTK_FOUND)
     ${CMAKE_SOURCE_DIR}/freeview/track_io
     SYSTEM
     ${ITK_INCLUDE_DIRS}
-    ${VTK_INCLUDE_DIRS}
+    $<TARGET_PROPERTY:VTK::CommonCore,INTERFACE_INCLUDE_DIRECTORIES>
   )
 
   include(${ITK_USE_FILE})  
-  include(${VTK_USE_FILE})
 
   if(NOT APPLE)
     add_compile_options(-Wno-deprecated -Wno-overloaded-virtual -Wno-unused-variable -Wno-unused-local-typedefs  -Wno-maybe-uninitialized )

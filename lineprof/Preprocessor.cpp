@@ -68,7 +68,7 @@ Preprocessor::convertInputToPointSet()
   // cell 3 = 0 -> 1
   vtkCellArray* lines = inputData->GetLines();
   lines->InitTraversal();
-  vtkIdType* vtkIds = NULL;
+  const vtkIdType* vtkIds = NULL;
   vtkIdType  numPoints;
   unsigned int counter = 0;
 
@@ -81,7 +81,7 @@ Preprocessor::convertInputToPointSet()
   float fBuf;
   while ( counter < 2 && lines->GetNextCell(numPoints, vtkIds) )
   {
-    vtkIdType* idPtr = vtkIds;
+    const vtkIdType* idPtr = vtkIds;
     for (vtkIdType ui=0; ui < numPoints; ++ui, ++idPtr )
     {
       for(unsigned int uiDim = 0; uiDim < Dimension; ++uiDim)
@@ -106,7 +106,7 @@ Preprocessor::convertInputToPointSet()
     typedef std::map<unsigned int,float> MapType;
     MapType distMap;
     float fLength(.0f);
-    vtkIdType* idPtr = vtkIds;
+    const vtkIdType* idPtr = vtkIds;
 
     // the following is useful for length measurements
     PointType prevPt;

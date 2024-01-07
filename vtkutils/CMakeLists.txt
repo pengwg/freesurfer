@@ -6,7 +6,6 @@ if(VTK_FOUND)
     ${FS_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/packages/tiff
-    ${VTK_INCLUDE_DIRS}
     ${X11_INCLUDE_DIR}
   )
 
@@ -23,6 +22,7 @@ if(VTK_FOUND)
   add_compile_options(-Wno-deprecated -Wno-inconsistent-missing-override)
 
   add_library(vtkutils STATIC ${SOURCES})
+  target_include_directories(vtkutils PRIVATE $<TARGET_PROPERTY:VTK::CommonCore,INTERFACE_INCLUDE_DIRECTORIES>)
   target_link_libraries(vtkutils tiff)
 
 endif()

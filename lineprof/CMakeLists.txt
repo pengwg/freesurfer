@@ -5,7 +5,6 @@ if(ITK_FOUND AND VTK_FOUND AND PETSC_FOUND)
   include_directories(
     SYSTEM
     ${ITK_INCLUDE_DIRS}
-    ${VTK_INCLUDE_DIRS}
     ${PETSC_INCLUDE_DIR}
   )
 
@@ -26,6 +25,8 @@ if(ITK_FOUND AND VTK_FOUND AND PETSC_FOUND)
 
   add_library(lineprof STATIC ${SOURCES})
 
+  target_include_directories(lineprof PRIVATE $<TARGET_PROPERTY:VTK::CommonCore,INTERFACE_INCLUDE_DIRECTORIES>)
+  
   if(APPLE)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework Accelerate")
   endif()
