@@ -154,6 +154,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 # Use host_os() to get HOST_OS to reference the correct 3rd party package build
 host_os()
+set(HOST_OS "Ubuntu22")
 
 # -------- zlib --------
 find_package(ZLIB REQUIRED)
