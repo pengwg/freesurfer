@@ -488,6 +488,8 @@ option(DISTRIBUTE_FSPYTHON "Include the fspython distribution in the installatio
 set(PYBIND11_PYTHON_VERSION 3)
 add_subdirectory(packages/pybind11)
 
+set(PYTHON_EXECUTABLE /usr/bin/python3)
+
 if(NOT DISTRIBUTE_FSPYTHON)
   # link to an external python binary if fspython won't be distributed
   if(APPLE_ARM64)
