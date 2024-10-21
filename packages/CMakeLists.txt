@@ -9,7 +9,6 @@ add_subdirectories(
   jpeg
   expat
   tiff
-  glut
   xml2
   minc
   dicom
