@@ -70,12 +70,12 @@ GenericRenderView::GenericRenderView(QWidget* parent, Qt::WindowFlags f) : QVTKW
 #endif
 
   m_renderer = vtkRenderer::New();
-#if VTK_MAJOR_VERSION > 7
+#if VTK_MAJOR_VERSION > 8
   vtkSmartPointer<vtkGenericOpenGLRenderWindow> renWin = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
-  SetRenderWindow(renWin);
+  setRenderWindow(renWin);
   setEnableHiDPI(true);
 #else
-  vtkRenderWindow* renWin = GetRenderWindow();
+  vtkRenderWindow* renWin = renderWindow();
   // fix for retina screens
 #ifdef Q_OS_OSX
   disableGLHiDPI(this->winId());
@@ -195,7 +195,7 @@ void GenericRenderView::Render()
   //  else
   //  qDebug() << "render" << this << QDateTime::currentDateTime().toMSecsSinceEpoch();
   if (isVisible())
-    GetRenderWindow()->Render();
+    renderWindow()->Render();
 
   //  setCursor(old_cursor);
 }
@@ -207,7 +207,7 @@ void GenericRenderView::RenderSelf()
     return;
   }
 
-  GetRenderWindow()->Render();
+  renderWindow()->Render();
 }
 
 void GenericRenderView::RefreshAllActors(bool bForScreenshot)
@@ -315,7 +315,7 @@ bool GenericRenderView::SaveImage(const QString& filename, bool bAntiAliasing, i
   {
     vtkVRMLExporter* exporter = vtkVRMLExporter::New();
     exporter->SetFileName(fn.toLatin1().data());
-    exporter->SetRenderWindow(GetRenderWindow());
+    exporter->SetRenderWindow(renderWindow());
     exporter->Write();
     exporter->Delete();
   }
@@ -367,18 +367,18 @@ bool GenericRenderView::SaveImage(const QString& filename, bool bAntiAliasing, i
 int GenericRenderView::GetAntialiasing()
 {
 #if VTK_MAJOR_VERSION > 5
-  return GetRenderWindow()->GetMultiSamples() > 0 ? 1: 0;
+  return renderWindow()->GetMultiSamples() > 0 ? 1: 0;
 #else
-  return GetRenderWindow()->GetAAFrames() > 0 ? 1: 0;
+  return renderWindow()->GetAAFrames() > 0 ? 1: 0;
 #endif
 }
 
 void GenericRenderView::SetAntialiasing(int bSet, bool redraw)
 {
 #if VTK_MAJOR_VERSION > 5
-  GetRenderWindow()->SetMultiSamples(bSet? 8 : 0);
+  renderWindow()->SetMultiSamples(bSet? 8 : 0);
 #else
-  GetRenderWindow()->SetAAFrames(bSet > 0 ? 6 : 0);
+  renderWindow()->SetAAFrames(bSet > 0 ? 6 : 0);
 #endif
   if (redraw)
   {
@@ -389,7 +389,7 @@ void GenericRenderView::SetAntialiasing(int bSet, bool redraw)
 void GenericRenderView::CopyToClipboard()
 {
   QClipboard* clipboard = QApplication::clipboard();
-  unsigned char* p = this->GetRenderWindow()->GetRGBACharPixelData(0, 0, this->width()-1, this->height()-1, 0);
+  unsigned char* p = this->renderWindow()->GetRGBACharPixelData(0, 0, this->width()-1, this->height()-1, 0);
   QImage image(p, width(), height(), QImage::Format_RGB32);
 
   unsigned char ch[2] = {0, 1};
@@ -410,7 +410,7 @@ void GenericRenderView::CopyToClipboard()
 
 void GenericRenderView::EnableInteractor(bool b)
 {
-  vtkRenderWindowInteractor* iren = GetRenderWindow()->GetInteractor();
+  vtkRenderWindowInteractor* iren = renderWindow()->GetInteractor();
   if (iren)
   {
     if (b)
@@ -426,12 +426,12 @@ void GenericRenderView::EnableInteractor(bool b)
 
 int GenericRenderView::GetStereoRender()
 {
-  return GetRenderWindow()->GetStereoRender();
+  return renderWindow()->GetStereoRender();
 }
 
 void GenericRenderView::SetStereoRender(bool bOn)
 {
-  GetRenderWindow()->SetStereoRender(bOn?1:0);
+  renderWindow()->SetStereoRender(bOn?1:0);
   //#ifdef Q_OS_MAC
   Render();
   //#endif
@@ -439,7 +439,7 @@ void GenericRenderView::SetStereoRender(bool bOn)
 
 void GenericRenderView::SetStereoTypeToAnaglyph()
 {
-  vtkRenderWindow* wnd = GetRenderWindow();
+  vtkRenderWindow* wnd = renderWindow();
   wnd->SetStereoTypeToAnaglyph();
   wnd->SetAnaglyphColorSaturation(0.6);
   SetStereoRender(true);
@@ -447,28 +447,28 @@ void GenericRenderView::SetStereoTypeToAnaglyph()
 
 void GenericRenderView::SetStereoTypeToRedBlue()
 {
-  vtkRenderWindow* wnd = GetRenderWindow();
+  vtkRenderWindow* wnd = renderWindow();
   wnd->SetStereoTypeToRedBlue();
   SetStereoRender(true);
 }
 
 void GenericRenderView::SetStereoTypeToInterlaced()
 {
-  vtkRenderWindow* wnd = GetRenderWindow();
+  vtkRenderWindow* wnd = renderWindow();
   wnd->SetStereoTypeToInterlaced();
   SetStereoRender(true);
 }
 
 void GenericRenderView::SetStereoTypeToDresden()
 {
-  vtkRenderWindow* wnd = GetRenderWindow();
+  vtkRenderWindow* wnd = renderWindow();
   wnd->SetStereoTypeToDresden();
   SetStereoRender(true);
 }
 
 void GenericRenderView::SetStereoTypeToCrystalEyes()
 {
-  vtkRenderWindow* wnd = GetRenderWindow();
+  vtkRenderWindow* wnd = renderWindow();
   wnd->SetStereoTypeToCrystalEyes();
   SetStereoRender(true);
 }
@@ -487,9 +487,9 @@ void GenericRenderView::SetStereoTypeToLeftRight(bool b)
     m_renderer2->SetViewport(0.5, 0, 1, 1);
     m_renderer2->InteractiveOff();
     m_renderer2->SetBackground(m_renderer->GetBackground());
-    GetRenderWindow()->AddRenderer(m_renderer2);
+    renderWindow()->AddRenderer(m_renderer2);
     UpdateRenderer2();
-    GetRenderWindow()->SetStereoTypeToRight();
+    renderWindow()->SetStereoTypeToRight();
     SetStereoRender(true);
     connect(this, SIGNAL(PropsUpdated()), this, SLOT(UpdateRenderer2()));
     connect(this, SIGNAL(RenderTriggeredByInteractor()), this, SLOT(UpdateCamera2()));
@@ -500,8 +500,8 @@ void GenericRenderView::SetStereoTypeToLeftRight(bool b)
     disconnect(this, SIGNAL(RenderTriggeredByInteractor()), this, SLOT(UpdateCamera2()));
     if (m_renderer2)
     {
-      GetRenderWindow()->RemoveRenderer(m_renderer2);
-      GetRenderWindow()->SetStereoTypeToInterlaced(); // call to avoid a vtk bug
+      renderWindow()->RemoveRenderer(m_renderer2);
+      renderWindow()->SetStereoTypeToInterlaced(); // call to avoid a vtk bug
       m_renderer2->Delete();
       m_renderer2 = NULL;
     }
@@ -557,7 +557,7 @@ void GenericRenderView::SetStereoPairAngle(int nAngle)
 
 vtkProp* GenericRenderView::PickObject(const QPoint& point, vtkPropCollection* propc, double* pickpos)
 {
-  if (GetRenderWindow()->GetStereoRender())
+  if (renderWindow()->GetStereoRender())
   {
     return NULL;
   }

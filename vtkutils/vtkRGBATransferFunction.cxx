@@ -1050,10 +1050,3 @@ int vtkRGBATransferFunction::AdjustRange(double range[2]) {
   return 1;
 }
 
-//----------------------------------------------------------------------------
-#ifndef VTK_LEGACY_REMOVE
-void vtkRGBATransferFunction::SetColorSpaceToHSVNoWrap() {
-  this->SetColorSpace(VTK_CTF_HSV);
-  this->SetHSVWrap(0);
-};
-#endif
