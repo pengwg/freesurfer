@@ -721,7 +721,7 @@ add_subdirectories(
   mris_topo_fixer
   mris_volmask
   mrisp_paint
-  python
+ # python
   samseg
   talairach_afd
   scripts
