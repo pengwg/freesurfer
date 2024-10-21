@@ -85,7 +85,7 @@ RenderView::RenderView( QWidget* parent ) : GenericRenderView( parent),
   vtkCellPicker* picker = vtkCellPicker::New();
   picker->SetTolerance( 0.0005 );
   picker->PickFromListOn();
-  this->GetRenderWindow()->GetInteractor()->SetPicker( picker );
+  this->renderWindow()->GetInteractor()->SetPicker( picker );
   picker->Delete();
 
   vtkSmartPointer<vtkPolyData> Grid = vtkSmartPointer<vtkPolyData>::New();
@@ -612,7 +612,7 @@ bool RenderView::SaveScreenShot(const QString& filename, bool bAntiAliasing, int
 
 int RenderView::PickCell( vtkProp* prop, int posX, int posY, double* pos_out )
 {
-  vtkCellPicker* picker = vtkCellPicker::SafeDownCast( GetRenderWindow()->GetInteractor()->GetPicker() );
+  vtkCellPicker* picker = vtkCellPicker::SafeDownCast( renderWindow()->GetInteractor()->GetPicker() );
   if ( !picker )
   {
     return -1;

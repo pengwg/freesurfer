@@ -77,12 +77,12 @@
 RenderView3D::RenderView3D( QWidget* parent ) : RenderView( parent )
 {
   m_interactorStyle = vtkSmartPointer<vtkInteractorStyleMyTrackballCamera>::New();
-  this->GetRenderWindow()->GetInteractor()->SetInteractorStyle(m_interactorStyle);
-  this->GetRenderWindow()->GetInteractor()->SetDesiredUpdateRate(30);
-  this->GetRenderWindow()->GetInteractor()->SetStillUpdateRate(0.01);
+  this->renderWindow()->GetInteractor()->SetInteractorStyle(m_interactorStyle);
+  this->renderWindow()->GetInteractor()->SetDesiredUpdateRate(30);
+  this->renderWindow()->GetInteractor()->SetStillUpdateRate(0.01);
 
-  GetRenderWindow()->SetAlphaBitPlanes(0);
-  GetRenderWindow()->SetMultiSamples(0);
+  renderWindow()->SetAlphaBitPlanes(0);
+  renderWindow()->SetMultiSamples(0);
   GetRenderer()->SetUseDepthPeeling(true);
   GetRenderer()->SetMaximumNumberOfPeels(4);
   GetRenderer()->SetOcclusionRatio(0);
@@ -437,7 +437,7 @@ void RenderView3D::DoUpdateRASPosition( int posX, int posY, bool bCursor, bool b
 
   // MousePositionToRAS( posX, posY, pos );
   // vtkPointPicker* picker = vtkPointPicker::SafeDownCast( this->GetPicker() );
-  vtkCellPicker* picker = vtkCellPicker::SafeDownCast( this->GetRenderWindow()->GetInteractor()->GetPicker() );
+  vtkCellPicker* picker = vtkCellPicker::SafeDownCast( this->renderWindow()->GetInteractor()->GetPicker() );
   if ( picker )
   {
     picker->InitializePickList();
@@ -737,7 +737,7 @@ int RenderView3D::PickCurrentSurfaceVertex(int posX, int posY, LayerSurface* cur
 
   posY = this->rect().height() - posY;
   int nvo = -1;
-  vtkCellPicker* picker = vtkCellPicker::SafeDownCast( this->GetRenderWindow()->GetInteractor()->GetPicker() );
+  vtkCellPicker* picker = vtkCellPicker::SafeDownCast( this->renderWindow()->GetInteractor()->GetPicker() );
   if ( picker )
   {
     picker->InitializePickList();
@@ -796,7 +796,7 @@ int RenderView3D::PickCurrentPointSetPoint(int posX, int posY, LayerPointSet *cu
 
   posY = this->rect().height() - posY;
   int nPt = -1;
-  vtkCellPicker* picker = vtkCellPicker::SafeDownCast( this->GetRenderWindow()->GetInteractor()->GetPicker() );
+  vtkCellPicker* picker = vtkCellPicker::SafeDownCast( this->renderWindow()->GetInteractor()->GetPicker() );
   if ( picker )
   {
     picker->InitializePickList();
@@ -1065,7 +1065,7 @@ void RenderView3D::MoveSliceToScreenCoord( int x, int y )
 
 vtkProp* RenderView3D::PickProp( int posX, int posY, double* pos_out, vtkPropCollection* props_in )
 {
-  vtkCellPicker* picker = vtkCellPicker::SafeDownCast( this->GetRenderWindow()->GetInteractor()->GetPicker() );
+  vtkCellPicker* picker = vtkCellPicker::SafeDownCast( this->renderWindow()->GetInteractor()->GetPicker() );
   if ( !picker )
   {
     return NULL;
