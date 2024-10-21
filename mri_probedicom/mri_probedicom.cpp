@@ -47,7 +47,7 @@
 #include <malloc.h>
 #endif
 #ifdef HAVE_OPENGL
-#include "glut.h"
+#include "GL/glut.h"
 #endif
 #include "error.h"
 #include "diag.h"

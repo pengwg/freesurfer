@@ -5,7 +5,6 @@ if(OPENGL_FOUND)
   include_directories(
     ${FS_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}/packages/dicom
-    ${CMAKE_SOURCE_DIR}/packages/glut
     ${CMAKE_SOURCE_DIR}/packages/dcm2niix
     ${X11_INCLUDE_DIR}
   )
