@@ -19,10 +19,9 @@ if(VTK_FOUND)
     # vtkODFGlyph.cxx
   )
 
-  add_compile_options(-Wno-deprecated -Wno-inconsistent-missing-override)
+  add_compile_options(-Wno-deprecated -Wno-inconsistent-missing-override -fpermissive)
 
   add_library(vtkutils STATIC ${SOURCES})
   target_include_directories(vtkutils PRIVATE $<TARGET_PROPERTY:VTK::CommonCore,INTERFACE_INCLUDE_DIRECTORIES>)
   target_link_libraries(vtkutils tiff)
-
 endif()
