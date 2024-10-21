@@ -264,6 +264,8 @@ if(BUILD_GUIS AND VTK_FOUND AND TARGET vtkutils)
     set(QT_LIBRARIES ${QT_LIBRARIES} Qt5::X11Extras)
   endif()
 
+  SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
   add_executable(freeview ${SOURCES})
 
   if(PETSC_FOUND AND NOT ARM64)
