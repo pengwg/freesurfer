@@ -1,6 +1,7 @@
 project(nnUNet)
 
 # set ref for nnUNet package destination
+set(FSPYTHON_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/\.\./fspython" CACHE PATH "fspython install path" FORCE)
 set(NNUNET_PKG_DST "${FSPYTHON_INSTALL_PREFIX}/python/packages/nnUNet_v2")
 
 # set ref for wrapper to be installed in bin/
