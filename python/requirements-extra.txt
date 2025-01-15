@@ -1,7 +1,7 @@
 # extra packages required for FS utilities
 tensorflow
 h5py
-torch
+torch==2.3.1
 opencv-python
 trimesh
 

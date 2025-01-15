@@ -279,19 +279,19 @@ if [ $torchcpu -eq 1 ]; then
    ## Does not look like there is a way to specify the latest version of the torch cpu package
    ## in requirements-extra.txt, e.g., torch==*.cpu
    # func_setup_fspython
-   torch_rev=`$python_binary -m pip freeze | grep torch | sed 's;^.*==;;'`
+   torch_rev=`$python_binary -m pip freeze --path $FREESURFER_HOME/python/packages | grep torch | sed 's;^.*==;;'`
    torch_rev_numeric=`echo $torch_rev| sed 's;\+.*;;'`
    if [ "${torch_rev}" == "${torch_rev_numeric}+cpu" ]; then
       echo "$s: ${torch_rev} already installed - nothing to do."
    else
       torch_rev_cpu="${torch_rev}+cpu"
       echo "$s: Replacing torch ${torch_rev} with torch ${torch_rev_cpu}"
-      $python_binary -m pip uninstall -y torch
+#      $python_binary -m pip uninstall -y torch
       if [ $? -ne 0 ]; then
          echo "$s: pip UNINSTALL failed - exiting."
          exit 1
       fi
-      yes | $python_binary -m pip install torch==${torch_rev_cpu} -f https://download.pytorch.org/whl/torch_stable.html
+      yes | $python_binary -m pip install torch==${torch_rev_cpu} -f https://download.pytorch.org/whl/torch_stable.html --target=$FREESURFER_HOME/python/packages
       if [ $? -ne 0 ]; then
          echo "$s: pip INSTALL failed - exiting."
          exit 1
@@ -310,11 +310,11 @@ if [ $uninstall -eq 1 ]; then
    ## remove triton
    ## replace torch with torch+cpu version (no cuda libs) via --libtorch arg above
    # $python_binary -m pip freeze | grep "^nvidia\|^triton\|^torch" > /dev/null
-   $python_binary -m pip freeze | grep "^nvidia\|^triton" > /dev/null
+   $python_binary -m pip freeze --path $FREESURFER_HOME/python/packages | grep "^nvidia\|^triton" > /dev/null
    if [ $? -eq 0 ]; then
       if [ ! -e ./postinstall.list ]; then touch postinstall.list; fi
       # $python_binary -m pip freeze | grep '^nvidia\|^triton\|^torch' | sed 's;==.*;;' >> postinstall.list
-      $python_binary -m pip freeze | grep '^nvidia\|^triton' | sed 's;==.*;;' >> postinstall.list
+      $python_binary -m pip freeze --path $FREESURFER_HOME/python/packages | grep '^nvidia\|^triton' | sed 's;==.*;;' >> postinstall.list
    else
       echo "$s: Found nothing to uninstall for nvidia and triton in output from pip freeze."
    fi
@@ -353,17 +353,17 @@ if [ $uninstall -eq 1 ]; then
    if [ -e ./postinstall.list ]; then
       echo -n "$s: Uninstalling: "
       cat postinstall.list | tr -s '\n' ' ' && echo
-      yes | $python_binary -m pip uninstall -y -q -r postinstall.list > /dev/null 2>&1
+   #   yes | $python_binary -m pip uninstall -y -q -r postinstall.list > /dev/null 2>&1
       if [ $? -ne 0 ]; then
          echo "$s: pip UNINSTALL failed - exiting."
          exit 1
       fi
    fi
 
-   $python_binary -m pip freeze | grep "^tensorflow" > /dev/null
+   $python_binary -m pip freeze --path $FREESURFER_HOME/python/packages | grep "^tensorflow" > /dev/null
    if [ $? -eq 0 ]; then
       echo "$s tensorflow modulues currently installed:"
-      $python_binary -m pip freeze | grep "^tensorflow"
+      $python_binary -m pip freeze --path $FREESURFER_HOME/python/packages | grep "^tensorflow"
    else
       echo "$s: Found no tensorflow modules installed - exiting."
       exit 1
